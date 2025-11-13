@@ -12,9 +12,9 @@ import StatsSection from "@/components/StatsSection"
 
 /* Mock Data */
 const featuredProperties = [
-  { id: "1", title: "2-Bedroom Apartment in Bawjiase", price: 800, location: "Awutu Bawjiase", image: "/images/mock4.jpg" },
-  { id: "2", title: "Single Room near Central Market", price: 400, location: "Awutu Bawjiase", image: "/images/mock2.jpg" },
-  { id: "3", title: "Self-Contained Studio", price: 600, location: "Awutu Bawjiase", image: "/images/mock3.jpg" },
+  { id: "1", title: "2-Bedroom Apartment in Bawjiase", price: 800, location: "Awutu Bawjiase", image: "/images/Mock4.jpg" },
+  { id: "2", title: "Single Room near Central Market", price: 400, location: "Awutu Bawjiase", image: "/images/Mock2.jpg" },
+  { id: "3", title: "Self-Contained Studio", price: 600, location: "Awutu Bawjiase", image: "/images/Mock3.jpg" },
 ]
 
 const features = [

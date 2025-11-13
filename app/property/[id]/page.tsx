@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Calendar } from "lucide-react";
 import {
   MapPin,
   Phone,
@@ -13,33 +14,35 @@ import {
   Share2,
   Heart,
   AlertCircle,
-} from "lucide-react"
-import Footer from "@/components/Footer"
-import BackButton from "@/components/BackButton"
+} from "lucide-react";
+import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
+import BookSiteVisitModal from "@/components/BookSiteVisitModal";
+import { Button } from "@/components/ui/button";
 
 /* ---------- Types ---------- */
 type Property = {
-  id: string
-  title: string
-  propertyType: string
-  price: number
-  paymentFrequency: string
-  available: boolean
-  region: string
-  town: string
-  landmark: string
-  amenities: string[]
-  description: string
-  images: string[]
+  id: string;
+  title: string;
+  propertyType: string;
+  price: number;
+  paymentFrequency: string;
+  available: boolean;
+  region: string;
+  town: string;
+  landmark: string;
+  amenities: string[];
+  description: string;
+  images: string[];
   listedBy: {
-    name: string
-    phone: string
-    email?: string
-  }
-  verified: boolean
-  createdAt: string
-  bedrooms?: number
-}
+    name: string;
+    phone: string;
+    email?: string;
+  };
+  verified: boolean;
+  createdAt: string;
+  bedrooms?: number;
+};
 
 /* ---------- Mock Data (Replace with API/Supabase call) ---------- */
 const MOCK_PROPERTIES: Property[] = [
@@ -54,7 +57,8 @@ const MOCK_PROPERTIES: Property[] = [
     town: "Awutu Bawjiase",
     landmark: "Near Morning Star Temple",
     amenities: ["Water", "Electricity", "Parking", "Toilet Inside", "Security"],
-    description: "Beautiful 2-bedroom apartment in a serene neighborhood. Close to schools, markets, and public transport. Water runs regularly and the area is very secure with a community watchman. Landlord is flexible with payment terms.",
+    description:
+      "Beautiful 2-bedroom apartment in a serene neighborhood. Close to schools, markets, and public transport. Water runs regularly and the area is very secure with a community watchman. Landlord is flexible with payment terms.",
     images: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3",
@@ -80,7 +84,8 @@ const MOCK_PROPERTIES: Property[] = [
     town: "Kasoa",
     landmark: "Behind Kasoa Market",
     amenities: ["Water", "Electricity", "Toilet Inside"],
-    description: "Affordable single room with private bathroom and kitchen. Perfect for a single person or couple. Located in a quiet area with easy access to transport.",
+    description:
+      "Affordable single room with private bathroom and kitchen. Perfect for a single person or couple. Located in a quiet area with easy access to transport.",
     images: [
       "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
@@ -93,60 +98,64 @@ const MOCK_PROPERTIES: Property[] = [
     createdAt: "2024-10-28",
     bedrooms: 1,
   },
-]
+];
 
 /* ---------- Component ---------- */
 export default function PropertyDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const propertyId = params?.id as string
+  const params = useParams();
+  const router = useRouter();
+  const propertyId = params?.id as string;
 
-  const [property, setProperty] = useState<Property | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [property, setProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   useEffect(() => {
     // Simulate API call - Replace with actual Supabase query
     const fetchProperty = async () => {
-      setLoading(true)
-      await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate network delay
-      
-      const found = MOCK_PROPERTIES.find((p) => p.id === propertyId)
-      setProperty(found || null)
-      setLoading(false)
-    }
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network delay
 
-    fetchProperty()
-  }, [propertyId])
+      const found = MOCK_PROPERTIES.find((p) => p.id === propertyId);
+      setProperty(found || null);
+      setLoading(false);
+    };
+
+    fetchProperty();
+  }, [propertyId]);
 
   const nextImage = () => {
-    if (!property) return
-    setCurrentImageIndex((prev) => (prev + 1) % property.images.length)
-  }
+    if (!property) return;
+    setCurrentImageIndex((prev) => (prev + 1) % property.images.length);
+  };
 
   const prevImage = () => {
-    if (!property) return
-    setCurrentImageIndex((prev) => 
+    if (!property) return;
+    setCurrentImageIndex((prev) =>
       prev === 0 ? property.images.length - 1 : prev - 1
-    )
-  }
+    );
+  };
 
   const handleContact = (method: "phone" | "whatsapp") => {
-    if (!property) return
-    
+    if (!property) return;
+
     if (method === "phone") {
-      window.location.href = `tel:${property.listedBy.phone}`
+      window.location.href = `tel:${property.listedBy.phone}`;
     } else {
       const message = encodeURIComponent(
         `Hi, I'm interested in your property: ${property.title}`
-      )
+      );
       window.open(
-        `https://wa.me/${property.listedBy.phone.replace(/\s/g, "")}?text=${message}`,
+        `https://wa.me/${property.listedBy.phone.replace(
+          /\s/g,
+          ""
+        )}?text=${message}`,
         "_blank"
-      )
+      );
     }
-  }
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -155,16 +164,16 @@ export default function PropertyDetailPage() {
           title: property?.title,
           text: `Check out this property: ${property?.title}`,
           url: window.location.href,
-        })
+        });
       } catch (err) {
-        console.log("Share failed:", err)
+        console.log("Share failed:", err);
       }
     } else {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href)
-      alert("Link copied to clipboard!")
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -174,7 +183,7 @@ export default function PropertyDetailPage() {
           <p className="text-gray-600">Loading property details...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!property) {
@@ -182,7 +191,9 @@ export default function PropertyDetailPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Property Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Property Not Found
+          </h2>
           <p className="text-gray-600 mb-6">
             The property you're looking for doesn't exist or has been removed.
           </p>
@@ -194,7 +205,7 @@ export default function PropertyDetailPage() {
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -233,7 +244,7 @@ export default function PropertyDetailPage() {
               alt={property.title}
               className="w-full h-full object-cover"
             />
-            
+
             {/* Image Navigation */}
             {property.images.length > 1 && (
               <>
@@ -279,7 +290,11 @@ export default function PropertyDetailPage() {
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img
+                    src={img}
+                    alt={`Thumbnail ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </button>
               ))}
             </div>
@@ -305,7 +320,9 @@ export default function PropertyDetailPage() {
                   </h1>
                   <div className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    <span>{property.town}, {property.region}</span>
+                    <span>
+                      {property.town}, {property.region}
+                    </span>
                   </div>
                   {property.landmark && (
                     <p className="text-sm text-gray-500 mt-1">
@@ -330,14 +347,17 @@ export default function PropertyDetailPage() {
                 </span>
                 {property.bedrooms && (
                   <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                    {property.bedrooms} Bedroom{property.bedrooms > 1 ? "s" : ""}
+                    {property.bedrooms} Bedroom
+                    {property.bedrooms > 1 ? "s" : ""}
                   </span>
                 )}
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  property.available
-                    ? "bg-green-50 text-green-700"
-                    : "bg-red-50 text-red-700"
-                }`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    property.available
+                      ? "bg-green-50 text-green-700"
+                      : "bg-red-50 text-red-700"
+                  }`}
+                >
                   {property.available ? "Available" : "Occupied"}
                 </span>
               </div>
@@ -350,7 +370,9 @@ export default function PropertyDetailPage() {
               transition={{ delay: 0.1 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Description</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Description
+              </h2>
               <p className="text-gray-600 leading-relaxed whitespace-pre-line">
                 {property.description}
               </p>
@@ -364,7 +386,9 @@ export default function PropertyDetailPage() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-2xl p-6 shadow-sm"
               >
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Amenities</h2>
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                  Amenities
+                </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {property.amenities.map((amenity) => (
                     <div
@@ -386,7 +410,9 @@ export default function PropertyDetailPage() {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-2xl p-6 shadow-sm"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Property Information</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Property Information
+              </h2>
               <div className="grid sm:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-gray-500">Property ID:</span>
@@ -404,9 +430,11 @@ export default function PropertyDetailPage() {
                 </div>
                 <div>
                   <span className="text-gray-500">Status:</span>
-                  <p className={`font-medium ${
-                    property.verified ? "text-green-600" : "text-yellow-600"
-                  }`}>
+                  <p
+                    className={`font-medium ${
+                      property.verified ? "text-green-600" : "text-yellow-600"
+                    }`}
+                  >
                     {property.verified ? "Verified" : "Pending Verification"}
                   </p>
                 </div>
@@ -429,9 +457,11 @@ export default function PropertyDetailPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <span className="text-sm text-gray-500">Listed by</span>
-                  <p className="font-medium text-gray-800">{property.listedBy.name}</p>
+                  <p className="font-medium text-gray-800">
+                    {property.listedBy.name}
+                  </p>
                 </div>
-                
+
                 <div className="flex items-center gap-2 text-gray-700">
                   <Phone className="w-4 h-4" />
                   <span className="text-sm">{property.listedBy.phone}</span>
@@ -450,8 +480,12 @@ export default function PropertyDetailPage() {
                   onClick={() => handleContact("whatsapp")}
                   className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
                   </svg>
                   WhatsApp
                 </button>
@@ -463,7 +497,15 @@ export default function PropertyDetailPage() {
                   <Phone className="w-5 h-5" />
                   Call Now
                 </button>
+                 <Button
+                onClick={() => setIsBookingOpen(true)}
+                className="w-full bg-[#FFD166] hover:bg-[#f0c356] text-gray-900 font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <Calendar className="w-5 h-5" />
+                Book Site Visit (₵15)
+              </Button>
               </div>
+             
 
               <div className="mt-6 pt-6 border-t text-center">
                 <p className="text-xs text-gray-500">
@@ -474,8 +516,13 @@ export default function PropertyDetailPage() {
           </div>
         </div>
       </div>
+      <BookSiteVisitModal
+        propertyTitle={property.title}
+        open={isBookingOpen}
+        onOpenChange={setIsBookingOpen}
+      />
 
       <Footer />
     </div>
-  )
+  );
 }

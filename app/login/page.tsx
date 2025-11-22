@@ -36,7 +36,7 @@ export default function LoginPage() {
               transition={{ delay: 0.3 }}
             >
               <h2 className="text-4xl font-bold text-white mb-4">
-                Welcome Back to<br />Essel Fie
+                Welcome Back to<br />TownWrent
               </h2>
               <div className="w-20 h-1 bg-[#FFD166] rounded-full mb-6"></div>
               <p className="text-teal-100 text-lg leading-relaxed">
@@ -71,7 +71,7 @@ export default function LoginPage() {
         <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
           {/* Mobile Logo */}
           <div className="lg:hidden mb-8 text-center">
-            <h1 className="text-3xl font-bold text-[#006D77]">Essel Fie</h1>
+            <h1 className="text-3xl font-bold text-[#006D77]">TownWrent</h1>
             <div className="w-16 h-1 bg-[#FFD166] mx-auto rounded-full mt-2"></div>
           </div>
 

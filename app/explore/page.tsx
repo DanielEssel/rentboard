@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { MapPin, Search, Home, BedDouble, BadgeCheck, SlidersHorizontal, X } from "lucide-react"
 import Footer from "@/components/Footer"
 import Link from "next/link"
+import Image from "next/image"
 
 type Property = {
   id: number
@@ -113,24 +114,30 @@ export default function ExplorePage() {
     <div className="min-h-screen bg-gray-50">
       {/* Navbar with Switch Role */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Home className="w-6 h-6 text-[#006D77]" />
-            <Link href="/" className="text-2xl font-bold text-[#006D77]">
-              Essel Fie
-            </Link>
-          </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem("userRole")
-              window.location.href = "/select-user"
-            }}
-            className="text-sm text-gray-600 hover:text-[#006D77] font-medium transition-colors"
-          >
-            Switch Role
-          </button>
-        </div>
-      </div>
+  <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+    <div className="flex items-center gap-2">
+      <Link href="/" className="text-xl font-bold text-[#006D77]">
+        <Image
+          src="/logos/wrent1.png"
+          alt="Wrent Logo"
+          width={55}
+          height={55}
+          className="object-contain"
+        />
+      </Link>
+    </div>
+    <button
+      onClick={() => {
+        localStorage.removeItem("userRole");
+        window.location.href = "/select-user";
+      }}
+      className="text-sm text-gray-600 hover:text-[#006D77] font-medium transition-colors"
+    >
+      Switch Role
+    </button>
+  </div>
+</div>
+
 
       {/* Hero / Search */}
       <section className="relative bg-[#006D77] text-white py-16 px-6 overflow-hidden">

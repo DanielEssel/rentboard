@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -29,19 +30,23 @@ export default function Navbar() {
 
   return (
     <nav
-      ref={navRef}
-      className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-5xl px-6 py-3 bg-white rounded-3xl flex items-center justify-between transition-all duration-300
-        ${scrolled ? "shadow-xl" : "shadow-lg"}
-      `}
-    >
-      {/* Logo */}
-      <Link
-        href="/"
-        className="text-2xl font-bold text-[#006D77] transition-colors duration-300 hover:text-[#005662]"
-      >
-        Essel Fie
-      </Link>
-
+  ref={navRef}
+  className={`fixed top-3 left-1/2 -translate-x-1/2 z-50 
+  w-[90%] max-w-5xl px-4 py-2 bg-white rounded-2xl flex items-center justify-between
+  transition-all duration-300
+  ${scrolled ? "shadow-xl" : "shadow-md"}
+`}
+>
+  {/* Logo */}
+  <Link href="/" className="inline-flex items-center">
+    <Image 
+      src="/logos/wrent1.png" 
+      alt="Wrent Logo" 
+      width={70} 
+      height={70} 
+      className="object-contain"
+    />
+  </Link>
       {/* Desktop Menu */}
       <div className="hidden md:flex items-center gap-8">
         <div className="flex gap-6">

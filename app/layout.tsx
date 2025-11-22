@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rentify",
-  description: "Rentify - Your Ultimate Rental Property Management Solution",
+  title: "TownWrent",
+  description: "Connecting tenants with verified properties.",
 };
 
 export default function RootLayout({

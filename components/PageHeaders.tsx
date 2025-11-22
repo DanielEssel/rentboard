@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   return (
@@ -15,7 +16,13 @@ export default function Navbar() {
           <span className="font-semibold">Back to Home</span>
         </Link>
         <Link href="/" className="text-xl font-bold text-[#006D77]">
-          Kojo Essel Realty
+          <Image
+                    src="/logos/wrent1.png"
+                    alt="Wrent Logo"
+                    width={55}
+                    height={55}
+                    className="object-contain"
+                  />
         </Link>
       </div>
     </nav>

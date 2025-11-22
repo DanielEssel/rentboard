@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
@@ -8,7 +9,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Logo / Branding */}
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-bold">Kojo Essel Realty</h2>
+          <Image src="/logos/wrent1.png" alt="Wrent Logo" width={140} height={50} className="mx-auto md:mx-0 mb-2" />
           <p className="text-sm mt-1 text-gray-200">
             Connecting tenants with verified properties.
           </p>
@@ -61,7 +62,7 @@ export default function Footer() {
 
       {/* Footer bottom */}
       <div className="mt-6 border-t border-white/30 pt-4 text-center text-gray-200 text-sm">
-        © {new Date().getFullYear()} Kojo Essel Realty. All rights reserved.
+        © {new Date().getFullYear()} TownWrent. All rights reserved.
       </div>
     </footer>
   );

@@ -39,7 +39,7 @@ export default function SelectUserPage() {
             className="mb-2 sm:mb-3"
           >
             <h1 className="text-2xl sm:text-3xl font-bold text-[#006D77] mb-2">
-              Welcome to Kojo Essel Realty
+              Welcome to TownWrent
             </h1>
             <div className="w-16 h-1 bg-[#FFD166] mx-auto rounded-full"></div>
           </motion.div>
@@ -145,7 +145,7 @@ export default function SelectUserPage() {
             Connecting tenants with verified properties
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            © {new Date().getFullYear()} Kojo Essel Realty
+            © {new Date().getFullYear()} TownWrent
           </p>
         </motion.div>
       </motion.div>

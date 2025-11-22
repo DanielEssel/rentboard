@@ -61,7 +61,7 @@ export default function SignupPage() {
               transition={{ delay: 0.3 }}
             >
               <h2 className="text-4xl font-bold text-white mb-4">
-                Join Essel Fie<br />Today
+                Join TownWrent<br />Today
               </h2>
               <div className="w-20 h-1 bg-[#FFD166] rounded-full mb-6"></div>
               <p className="text-teal-100 text-lg leading-relaxed mb-8">
@@ -112,7 +112,7 @@ export default function SignupPage() {
         <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
           {/* Mobile Logo */}
           <div className="lg:hidden mb-8 text-center">
-            <h1 className="text-3xl font-bold text-[#006D77]">Essel Fie</h1>
+            <h1 className="text-3xl font-bold text-[#006D77]">TownWrent</h1>
             <div className="w-16 h-1 bg-[#FFD166] mx-auto rounded-full mt-2"></div>
           </div>
 
@@ -140,7 +140,7 @@ export default function SignupPage() {
                     type="text"
                     value={formData.fullName}
                     onChange={handleChange}
-                    placeholder="Daniel Kojo Essel"
+                    placeholder="Miracle Essel"
                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#006D77] focus:border-transparent transition-all"
                     required
                   />

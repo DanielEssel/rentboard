@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Plus, CheckCircle, Image as ImageIcon } from "lucide-react";
 import Footer from "@/components/Footer";
 import PageHeaders from "@/components/PageHeaders";
+import { createProperty } from "@/lib/propertyApi";
 
 type PropertyType =
   | "Apartment"
@@ -129,10 +130,39 @@ export default function PostPropertyPage() {
 
   const submitProperty = async () => {
     if (!validateStep(3)) return;
+    
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 900));
-    setLoading(false);
-    router.push("/?msg=property_submitted");
+    try {
+      await createProperty({
+        title: form.title,
+        property_type: form.propertyType as string,
+        price: parseFloat(form.price),
+        payment_frequency: form.paymentFrequency,
+        available: form.available,
+        region: form.region,
+        town: form.town,
+        landmark: form.landmark,
+        amenities: form.amenities,
+        description: form.description,
+        images: form.images,
+      });
+      
+      router.push("/?msg=property_submitted");
+    } catch (error) {
+      console.error('Error submitting property:', error);
+      
+      // Show user-friendly error message
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Failed to submit property. Please try again.';
+      
+      setErrors({ submit: errorMessage });
+      
+      // Optionally show an alert
+      alert(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -164,6 +194,13 @@ export default function PostPropertyPage() {
           />
         </div>
 
+        {/* Error Banner */}
+        {errors.submit && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            {errors.submit}
+          </div>
+        )}
+
         {/* Card */}
         <div className="bg-white rounded-2xl shadow p-6 sm:p-8">
           {/* Step Panels */}
@@ -189,6 +226,9 @@ export default function PostPropertyPage() {
                       value={form.title}
                       onChange={(e) => update("title", e.target.value)}
                     />
+                    {errors.title && (
+                      <span className="text-xs text-red-500 mt-1">{errors.title}</span>
+                    )}
                   </label>
 
                   <label>
@@ -207,6 +247,9 @@ export default function PostPropertyPage() {
                         <option key={t}>{t}</option>
                       ))}
                     </select>
+                    {errors.propertyType && (
+                      <span className="text-xs text-red-500 mt-1">{errors.propertyType}</span>
+                    )}
                   </label>
 
                   <label>
@@ -220,6 +263,9 @@ export default function PostPropertyPage() {
                       value={form.price}
                       onChange={(e) => update("price", e.target.value)}
                     />
+                    {errors.price && (
+                      <span className="text-xs text-red-500 mt-1">{errors.price}</span>
+                    )}
                   </label>
 
                   <label>
@@ -251,21 +297,31 @@ export default function PostPropertyPage() {
                   <label>
                     <span className="text-sm text-gray-700">Region</span>
                     <input
-                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                        errors.region ? "border-red-400" : "border-gray-200"
+                      }`}
                       placeholder="e.g. Central Region"
                       value={form.region}
                       onChange={(e) => update("region", e.target.value)}
                     />
+                    {errors.region && (
+                      <span className="text-xs text-red-500 mt-1">{errors.region}</span>
+                    )}
                   </label>
 
                   <label>
                     <span className="text-sm text-gray-700">Town</span>
                     <input
-                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                        errors.town ? "border-red-400" : "border-gray-200"
+                      }`}
                       placeholder="e.g. Awutu Bawjiase"
                       value={form.town}
                       onChange={(e) => update("town", e.target.value)}
                     />
+                    {errors.town && (
+                      <span className="text-xs text-red-500 mt-1">{errors.town}</span>
+                    )}
                   </label>
 
                   <label className="sm:col-span-2">
@@ -311,11 +367,16 @@ export default function PostPropertyPage() {
                 <label className="block mb-4">
                   <span className="text-sm text-gray-700">Description</span>
                   <textarea
-                    className="mt-1 w-full h-28 rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
+                    className={`mt-1 w-full h-28 rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      errors.description ? "border-red-400" : "border-gray-200"
+                    }`}
                     placeholder="Include details like water, electricity, nearby landmarks, etc."
                     value={form.description}
                     onChange={(e) => update("description", e.target.value)}
                   />
+                  {errors.description && (
+                    <span className="text-xs text-red-500 mt-1">{errors.description}</span>
+                  )}
                 </label>
 
                 {/* Images */}
@@ -363,7 +424,8 @@ export default function PostPropertyPage() {
             {step > 1 && (
               <button
                 onClick={back}
-                className="w-full sm:w-auto px-5 py-2 rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                disabled={loading}
+                className="w-full sm:w-auto px-5 py-2 rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
               >
                 Back
               </button>

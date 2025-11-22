@@ -1,59 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Search, Home, BedDouble, BadgeCheck, SlidersHorizontal, X } from "lucide-react"
 import Footer from "@/components/Footer"
 import Link from "next/link"
 import Image from "next/image"
-
-type Property = {
-  id: number
-  title: string
-  location: string
-  price: string
-  image: string
-  type: string
-  verified?: boolean
-  bedrooms?: number
-}
-
-const mockProperties: Property[] = [
-  {
-    id: 1,
-    title: "2-Bed Apartment at Awutu Bawjiase",
-    location: "Awutu Bawjiase",
-    price: "₵800 / month",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    type: "Apartment",
-    verified: true,
-    bedrooms: 2,
-  },
-  {
-    id: 2,
-    title: "Single Room Self Contained at Kasoa",
-    location: "Kasoa",
-    price: "₵450 / month",
-    image: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
-    type: "Single Room",
-    verified: true,
-    bedrooms: 1,
-  },
-  {
-    id: 3,
-    title: "3-Bed House at Nyanyano",
-    location: "Nyanyano",
-    price: "₵1,200 / month",
-    image: "https://images.unsplash.com/photo-1599423300746-b62533397364",
-    type: "House",
-    verified: false,
-    bedrooms: 3,
-  },
-]
+import { getProperties, Property } from "@/lib/propertyApi"
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("")
-  const [filtered, setFiltered] = useState<Property[]>(mockProperties)
+  const [properties, setProperties] = useState<Property[]>([])
+  const [filtered, setFiltered] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   
   // Filter states
@@ -62,29 +21,40 @@ export default function ExplorePage() {
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [bedroomCount, setBedroomCount] = useState<string>("all")
 
+  // Fetch properties on mount
+  useEffect(() => {
+    loadProperties()
+  }, [])
+
+  const loadProperties = async () => {
+    setLoading(true)
+    try {
+      const data = await getProperties()
+      setProperties(data)
+      setFiltered(data)
+    } catch (error) {
+      console.error("Error loading properties:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSearch = () => {
-    let results = mockProperties.filter(
+    let results = properties.filter(
       (p) =>
         p.title.toLowerCase().includes(search.toLowerCase()) ||
-        p.location.toLowerCase().includes(search.toLowerCase())
+        p.region.toLowerCase().includes(search.toLowerCase()) ||
+        p.town.toLowerCase().includes(search.toLowerCase())
     )
 
     // Apply filters
     if (propertyType !== "all") {
-      results = results.filter((p) => p.type === propertyType)
-    }
-
-    if (verifiedOnly) {
-      results = results.filter((p) => p.verified)
-    }
-
-    if (bedroomCount !== "all") {
-      results = results.filter((p) => p.bedrooms === Number(bedroomCount))
+      results = results.filter((p) => p.property_type === propertyType)
     }
 
     if (priceRange !== "all") {
       results = results.filter((p) => {
-        const price = parseInt(p.price.replace(/[^\d]/g, ""))
+        const price = p.price
         switch (priceRange) {
           case "low":
             return price < 500
@@ -107,37 +77,37 @@ export default function ExplorePage() {
     setVerifiedOnly(false)
     setBedroomCount("all")
     setSearch("")
-    setFiltered(mockProperties)
+    setFiltered(properties)
   }
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar with Switch Role */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-  <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-    <div className="flex items-center gap-2">
-      <Link href="/" className="text-xl font-bold text-[#006D77]">
-        <Image
-          src="/logos/wrent1.png"
-          alt="Wrent Logo"
-          width={55}
-          height={55}
-          className="object-contain"
-        />
-      </Link>
-    </div>
-    <button
-      onClick={() => {
-        localStorage.removeItem("userRole");
-        window.location.href = "/select-user";
-      }}
-      className="text-sm text-gray-600 hover:text-[#006D77] font-medium transition-colors"
-    >
-      Switch Role
-    </button>
-  </div>
-</div>
-
+        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Link href="/" className="text-xl font-bold text-[#006D77]">
+              <Image
+                src="/logos/wrent1.png"
+                alt="Wrent Logo"
+                width={55}
+                height={55}
+                className="object-contain"
+              />
+            </Link>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem("userRole");
+              window.location.href = "/select-user";
+            }}
+            className="text-sm text-gray-600 hover:text-[#006D77] font-medium transition-colors"
+          >
+            Switch Role
+          </button>
+        </div>
+      </div>
 
       {/* Hero / Search */}
       <section className="relative bg-[#006D77] text-white py-16 px-6 overflow-hidden">
@@ -211,7 +181,7 @@ export default function ExplorePage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Property Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -224,8 +194,11 @@ export default function ExplorePage() {
                 >
                   <option value="all">All Types</option>
                   <option value="Apartment">Apartment</option>
-                  <option value="House">House</option>
                   <option value="Single Room">Single Room</option>
+                  <option value="Self Contained">Self Contained</option>
+                  <option value="Store">Store</option>
+                  <option value="Office">Office</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
@@ -246,37 +219,18 @@ export default function ExplorePage() {
                 </select>
               </div>
 
-              {/* Bedrooms */}
+              {/* Region Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bedrooms
+                  Region
                 </label>
-                <select
-                  value={bedroomCount}
-                  onChange={(e) => setBedroomCount(e.target.value)}
+                <input
+                  type="text"
+                  placeholder="e.g. Central Region"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D77] focus:outline-none"
-                >
-                  <option value="all">Any</option>
-                  <option value="1">1 Bedroom</option>
-                  <option value="2">2 Bedrooms</option>
-                  <option value="3">3+ Bedrooms</option>
-                </select>
-              </div>
-
-              {/* Verified Only */}
-              <div className="flex items-end">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={verifiedOnly}
-                    onChange={(e) => setVerifiedOnly(e.target.checked)}
-                    className="w-4 h-4 text-[#006D77] border-gray-300 rounded focus:ring-[#006D77]"
-                  />
-                  <span className="text-sm font-medium text-gray-700">
-                    Verified Only
-                  </span>
-                  <BadgeCheck className="w-4 h-4 text-green-500" />
-                </label>
+                />
               </div>
             </div>
 
@@ -298,7 +252,12 @@ export default function ExplorePage() {
           </h2>
         </div>
 
-        {filtered.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#006D77]"></div>
+            <p className="mt-4 text-gray-600">Loading properties...</p>
+          </div>
+        ) : filtered.length > 0 ? (
           <motion.div
             layout
             className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
@@ -312,19 +271,18 @@ export default function ExplorePage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: property.id * 0.1 }}
                   className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
                 >
                   <div className="relative overflow-hidden">
                     <img
-                      src={property.image}
+                      src={property.property_images?.[0]?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
                       alt={property.title}
                       className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {property.verified && (
+                    {property.available && (
                       <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                         <BadgeCheck className="w-3 h-3" />
-                        Verified
+                        Available
                       </div>
                     )}
                   </div>
@@ -334,12 +292,14 @@ export default function ExplorePage() {
                     </h3>
                     <p className="text-sm text-gray-500 flex items-center gap-1 mb-3">
                       <MapPin className="h-4 w-4 text-gray-400" />
-                      {property.location}
+                      {property.town}, {property.region}
                     </p>
                     <div className="flex justify-between items-center">
-                      <p className="font-semibold text-[#006D77] text-lg">{property.price}</p>
+                      <p className="font-semibold text-[#006D77] text-lg">
+                        ₵{property.price} / {property.payment_frequency}
+                      </p>
                       <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                        {property.type}
+                        {property.property_type}
                       </span>
                     </div>
                   </div>

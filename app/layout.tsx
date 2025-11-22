@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TownWrent",
   description: "Connecting tenants with verified properties.",
+  icons: {
+  icon: [
+    { url: "/logos/wrent1.png", type: "image/png" },
+    { url: "/logos/wrent1.png", rel: "shortcut icon" },
+  ],
+  apple: "/logos/wrent1.png",
+},
+
 };
 
 export default function RootLayout({

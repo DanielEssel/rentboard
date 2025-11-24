@@ -1,11 +1,11 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import CTAButton from "./CTAButton"
 import Image from "next/image"
-import { Home, UserCheck, AlertCircle } from "lucide-react"
+import { Home, UserCheck, AlertCircle, X, LogIn, UserPlus } from "lucide-react"
 import { supabase } from "@/lib/supabase/client"
 
 const fadeUp = {
@@ -28,9 +28,6 @@ export default function HeroSection() {
     if (!user) {
       // Show authentication prompt
       setShowAuthPrompt(true)
-      
-      // Auto-hide after 5 seconds
-      setTimeout(() => setShowAuthPrompt(false), 5000)
     } else {
       // User is authenticated, proceed to list property
       router.push('/list-property')
@@ -40,6 +37,11 @@ export default function HeroSection() {
   const handleSignIn = () => {
     // Redirect to sign-in page with return URL
     router.push('/auth/login?returnTo=/list-property')
+  }
+
+  const handleSignUp = () => {
+    // Redirect to sign-up page with return URL
+    router.push('/auth/signup?returnTo=/list-property')
   }
 
   return (
@@ -62,7 +64,7 @@ export default function HeroSection() {
 
       {/* Floating Decorative Icons */}
       <motion.div
-        className="absolute top-16 left-10 opacity-40"
+        className="absolute top-16 left-10 opacity-40 hidden md:block"
         animate={{ y: [0, 20, 0] }}
         transition={{ duration: 6, repeat: Infinity }}
       >
@@ -70,7 +72,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-24 right-20 opacity-40"
+        className="absolute bottom-24 right-20 opacity-40 hidden md:block"
         animate={{ y: [0, -20, 0] }}
         transition={{ duration: 8, repeat: Infinity }}
       >
@@ -78,59 +80,111 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Authentication Prompt Modal */}
-      {showAuthPrompt && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-white text-gray-800 rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4"
-        >
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-10 h-10 bg-[#FFD166]/20 rounded-full flex items-center justify-center">
-              <AlertCircle className="h-5 w-5 text-[#006D77]" />
-            </div>
-            <div className="flex-1 text-left">
-              <h3 className="font-bold text-lg text-[#006D77] mb-2">
-                Sign In Required
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                You need to be signed in to list a property. Create an account or sign in to continue.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleSignIn}
-                  className="flex-1 bg-[#006D77] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#005662] transition-colors"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => setShowAuthPrompt(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={() => setShowAuthPrompt(false)}
-            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-          >
-            ✕
-          </button>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {showAuthPrompt && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAuthPrompt(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            />
 
-      {/* Backdrop for modal */}
-      {showAuthPrompt && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setShowAuthPrompt(false)}
-          className="fixed inset-0 bg-black/50 z-40"
-        />
-      )}
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-6 py-5 relative">
+                  <div className="flex items-center gap-3 text-white">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="h-5 w-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <h3 className="font-bold text-lg">Authentication Required</h3>
+                      <p className="text-teal-100 text-sm">Please sign in to continue</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowAuthPrompt(false)}
+                    className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                    To list a property on TownWrent, you need to create an account or sign in. 
+                    Join our community of verified landlords and tenants today.
+                  </p>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleSignIn}
+                      className="w-full bg-[#006D77] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#005662] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl group"
+                    >
+                      <LogIn className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                      Sign In to Your Account
+                    </button>
+                    
+                    <button
+                      onClick={handleSignUp}
+                      className="w-full bg-white text-[#006D77] px-6 py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group"
+                    >
+                      <UserPlus className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                      Create New Account
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="relative my-5">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="px-3 bg-white text-gray-500 font-medium">
+                        OR
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Cancel Button */}
+                  <button
+                    onClick={() => setShowAuthPrompt(false)}
+                    className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors text-sm py-2"
+                  >
+                    Continue Browsing
+                  </button>
+                </div>
+
+                {/* Footer */}
+                <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
+                  <p className="text-xs text-gray-500 text-center">
+                    By signing in, you agree to our{" "}
+                    <a href="/terms" className="text-[#006D77] hover:underline font-medium">
+                      Terms of Service
+                    </a>{" "}
+                    and{" "}
+                    <a href="/privacy" className="text-[#006D77] hover:underline font-medium">
+                      Privacy Policy
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Hero Content */}
       <motion.h1

@@ -3,10 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Plus, CheckCircle, Image as ImageIcon } from "lucide-react";
+import {  Image as ImageIcon, Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import PageHeaders from "@/components/PageHeaders";
 import { createProperty } from "@/lib/propertyApi";
+import { supabase } from "@/lib/supabase/client";
 
 type PropertyType =
   | "Apartment"
@@ -54,6 +55,7 @@ export default function PostPropertyPage() {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -72,6 +74,27 @@ export default function PostPropertyPage() {
   });
 
   const [previews, setPreviews] = useState<string[]>([]);
+
+  // Protected Route: Check Authentication
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          // Redirect to login with return URL
+          router.push('/auth/login?returnTo=/list-property');
+        } else {
+          setCheckingAuth(false);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+        router.push('/auth/login?returnTo=/list-property');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     const urls = form.images.map((f) => URL.createObjectURL(f));
@@ -151,19 +174,28 @@ export default function PostPropertyPage() {
     } catch (error) {
       console.error('Error submitting property:', error);
       
-      // Show user-friendly error message
       const errorMessage = error instanceof Error 
         ? error.message 
         : 'Failed to submit property. Please try again.';
       
       setErrors({ submit: errorMessage });
-      
-      // Optionally show an alert
       alert(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading screen while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-[#006D77] mx-auto mb-4" />
+          <p className="text-gray-600">Verifying authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -442,8 +474,9 @@ export default function PostPropertyPage() {
               <button
                 onClick={submitProperty}
                 disabled={loading}
-                className="w-full sm:w-auto px-5 py-2 rounded-md bg-[#006D77] text-white font-medium hover:opacity-95 disabled:opacity-60"
+                className="w-full sm:w-auto px-5 py-2 rounded-md bg-[#006D77] text-white font-medium hover:opacity-95 disabled:opacity-60 flex items-center justify-center gap-2"
               >
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 {loading ? "Submitting..." : "Post Property"}
               </button>
             )}

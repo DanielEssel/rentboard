@@ -16,7 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Footer from "@/components/Footer";
-import BackButton from "@/components/BackButton";
+import PageHeaders from "@/components/PageHeaders";
 import BookSiteVisitModal from "@/components/BookSiteVisitModal";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
@@ -254,28 +254,14 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header with Back Button */}
-      <div className="bg-white border-b sticky top-0 z-20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <BackButton variant="ghost" />
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsFavorite(!isFavorite)}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            >
-              <Heart
-                className={`w-6 h-6 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
-              />
-            </button>
-            <button onClick={handleShare} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-              <Share2 className="w-6 h-6 text-gray-600" />
-            </button>
-          </div>
-        </div>
-      </div>
 
-      {/* Image Gallery */}
-      <div className="relative bg-black">
+  {/* Page Header */}
+  <div className=" pb-0.3 bg-white/60 backdrop-blur-sm sticky top-0 z-40">
+    <PageHeaders />
+  </div>
+
+  {/* Image Gallery Section */}
+  <div className="relative bg-black">
         <div className="max-w-7xl mx-auto">
           <div className="relative h-96 md:h-[500px]">
             {currentImage ? (

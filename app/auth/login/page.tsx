@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -7,7 +7,7 @@ import BackButton from "@/components/BackButton"
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react"
 import { supabase } from "@/lib/supabase/client"
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const returnTo = searchParams.get('returnTo') || '/'
@@ -31,7 +31,6 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // Redirect to return URL or home
       router.push(returnTo)
       router.refresh()
     } catch (error: any) {
@@ -285,5 +284,20 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-yellow-50">
+        <div className="text-center">
+          <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#006D77] border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+          <p className="text-lg text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }

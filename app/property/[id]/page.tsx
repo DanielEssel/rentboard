@@ -34,6 +34,8 @@ type Profile = {
   id: string;
   full_name?: string;
   avatar_url?: string;
+  phone?: string | null;
+  email?: string | null;
   created_at?: string;
   updated_at?: string;
 };

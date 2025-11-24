@@ -275,7 +275,7 @@ export default function ExplorePage() {
                 >
                   <div className="relative overflow-hidden">
                     <img
-                      src={property.property_images?.[0]?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
+                      src={(property as any).property_images?.[0]?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
                       alt={property.title}
                       className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />

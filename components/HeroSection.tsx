@@ -98,56 +98,55 @@ export default function HeroSection() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100%-2rem)] sm:w-full max-w-md"
             >
-              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-6 py-5 relative">
-                  <div className="flex items-center gap-3 text-white">
-                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <AlertCircle className="h-5 w-5" />
+                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-4 sm:px-6 py-4 sm:py-5 relative">
+                  <div className="flex items-center gap-2 sm:gap-3 text-white">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-left flex-1">
-                      <h3 className="font-bold text-lg">Authentication Required</h3>
-                      <p className="text-teal-100 text-sm">Please sign in to continue</p>
+                      <h3 className="font-bold text-base sm:text-lg">Authentication Required</h3>
+                      <p className="text-teal-100 text-xs sm:text-sm hidden sm:block">Please sign in to continue</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setShowAuthPrompt(false)}
-                    className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+                    className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
                   >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                    To list a property on TownWrent, you need to create an account or sign in. 
-                    Join our community of verified landlords and tenants today.
+                <div className="p-4 sm:p-6">
+                  <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
+                    To list a property on TownWrent, you need to create an account or sign in.
                   </p>
 
                   {/* Action Buttons */}
-                  <div className="space-y-3">
+                  <div className="space-y-2.5 sm:space-y-3">
                     <button
                       onClick={handleSignIn}
-                      className="w-full bg-[#006D77] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#005662] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl group"
+                      className="w-full bg-[#006D77] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#005662] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl group text-sm sm:text-base"
                     >
-                      <LogIn className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                      Sign In to Your Account
+                      <LogIn className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      Sign In
                     </button>
                     
                     <button
                       onClick={handleSignUp}
-                      className="w-full bg-white text-[#006D77] px-6 py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group"
+                      className="w-full bg-white text-[#006D77] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group text-sm sm:text-base"
                     >
-                      <UserPlus className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                      Create New Account
+                      <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      Create Account
                     </button>
                   </div>
 
                   {/* Divider */}
-                  <div className="relative my-5">
+                  <div className="relative my-4 sm:my-5">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-200"></div>
                     </div>
@@ -161,18 +160,18 @@ export default function HeroSection() {
                   {/* Cancel Button */}
                   <button
                     onClick={() => setShowAuthPrompt(false)}
-                    className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors text-sm py-2"
+                    className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors text-xs sm:text-sm py-2"
                   >
                     Continue Browsing
                   </button>
                 </div>
 
                 {/* Footer */}
-                <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
-                  <p className="text-xs text-gray-500 text-center">
+                <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
+                  <p className="text-[10px] sm:text-xs text-gray-500 text-center leading-relaxed">
                     By signing in, you agree to our{" "}
                     <a href="/terms" className="text-[#006D77] hover:underline font-medium">
-                      Terms of Service
+                      Terms
                     </a>{" "}
                     and{" "}
                     <a href="/privacy" className="text-[#006D77] hover:underline font-medium">

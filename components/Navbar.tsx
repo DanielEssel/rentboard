@@ -171,6 +171,92 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* --- MOBILE MENU --- */}
+{open && (
+  <motion.div
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    className="md:hidden fixed top-20 left-1/2 -translate-x-1/2 
+               w-[90%] bg-white shadow-xl rounded-2xl p-6 z-40"
+  >
+    <div className="flex flex-col gap-4">
+      {menuItems.map((item) => {
+        const isActive = pathname === item.href;
+
+        if (item.href === "/list-property") {
+          return (
+            <button
+              key={item.href}
+              onClick={() => handleProtectedNav(item.href)}
+              className={`text-lg font-medium text-left ${
+                isActive ? "text-[#006D77]" : "text-gray-700"
+              }`}
+            >
+              {item.label}
+            </button>
+          );
+        }
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={() => setOpen(false)}
+            className={`text-lg font-medium ${
+              isActive ? "text-[#006D77]" : "text-gray-700"
+            }`}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
+
+      {/* ---- AUTH SECTION ---- */}
+      {!user ? (
+        <div className="flex flex-col gap-3 mt-4">
+          <Link
+            href="/auth/login"
+            onClick={() => setOpen(false)}
+            className="block p-3 rounded-lg border font-semibold text-[#006D77] text-center"
+          >
+            Login
+          </Link>
+
+          <Link
+            href="/auth/signup"
+            onClick={() => setOpen(false)}
+            className="block p-3 rounded-lg bg-[#FFD166] font-semibold text-[#006D77] text-center"
+          >
+            Sign Up
+          </Link>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3 mt-4">
+          <Link
+            href="/dashboard"
+            onClick={() => setOpen(false)}
+            className="block p-3 rounded-lg bg-gray-100"
+          >
+            Dashboard
+          </Link>
+
+          <button
+            onClick={() => {
+              handleLogout();
+              setOpen(false);
+            }}
+            className="flex items-center justify-center gap-2 p-3 rounded-lg bg-red-100 text-red-600"
+          >
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
+      )}
+    </div>
+  </motion.div>
+)}
+
+
       {/* ---- AUTH MODAL ---- */}
       {showAuthPrompt && (
         <>

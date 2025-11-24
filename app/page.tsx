@@ -24,6 +24,18 @@ const features = [
   { Icon: Home, title: "Fast Turnaround", description: "Properties are listed and rented efficiently through our agency." },
 ]
 
+// Shared animation variants - optimized to prevent layout shift
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.5
+    } 
+  }
+}
+
 export default function LandingPage() {
   return (
     <main className="font-sans">
@@ -38,14 +50,11 @@ export default function LandingPage() {
         className="py-20 px-6 bg-gray-50 text-gray-800 text-center" 
         initial="hidden" 
         whileInView="visible" 
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: "-100px", amount: 0.3 }}
       >
         <motion.h2 
           className="text-3xl font-bold mb-12" 
-          variants={{ 
-            hidden: { opacity: 0, y: 20 }, 
-            visible: { opacity: 1, y: 0, transition: { delay: 0.15 } } 
-          }}
+          variants={fadeInUp}
         >
           How It Works
         </motion.h2>
@@ -61,14 +70,11 @@ export default function LandingPage() {
         className="py-20 px-6 text-gray-800" 
         initial="hidden" 
         whileInView="visible" 
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: "-100px", amount: 0.3 }}
       >
         <motion.h2 
           className="text-3xl font-bold mb-12 text-center" 
-          variants={{ 
-            hidden: { opacity: 0, y: 20 }, 
-            visible: { opacity: 1, y: 0, transition: { delay: 0.15 } } 
-          }}
+          variants={fadeInUp}
         >
           Featured Properties
         </motion.h2>
@@ -82,14 +88,11 @@ export default function LandingPage() {
         className="py-20 px-6 bg-[#E0FBFC] text-gray-800 text-center" 
         initial="hidden" 
         whileInView="visible" 
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: "-100px", amount: 0.3 }}
       >
         <motion.h2 
           className="text-3xl font-bold mb-12" 
-          variants={{ 
-            hidden: { opacity: 0, y: 20 }, 
-            visible: { opacity: 1, y: 0, transition: { delay: 0.15 } } 
-          }}
+          variants={fadeInUp}
         >
           Why Choose Us
         </motion.h2>
@@ -106,14 +109,11 @@ export default function LandingPage() {
         className="py-20 px-6 bg-[#173235] text-white text-center" 
         initial="hidden" 
         whileInView="visible" 
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: "-100px", amount: 0.3 }}
       >
         <motion.h2 
           className="text-3xl sm:text-4xl font-bold mb-6" 
-          variants={{ 
-            hidden: { opacity: 0, y: 20 }, 
-            visible: { opacity: 1, y: 0, transition: { delay: 0.15 } } 
-          }}
+          variants={fadeInUp}
         >
           Ready to find your perfect place?
         </motion.h2>

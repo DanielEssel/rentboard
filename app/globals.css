@@ -116,7 +116,76 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  /* ===== MOBILE FIX: Prevent Shaking & Viewport Issues ===== */
+  html {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scroll on mobile */
+    width: 100%;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+    /* Use dynamic viewport height for mobile browsers */
+    min-height: 100dvh;
+    /* Disable pull-to-refresh bouncing on mobile */
+    overscroll-behavior-y: none;
+    /* Prevent layout shift from address bar */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Fix min-h-screen for mobile viewport */
+  @supports (height: 100dvh) {
+    .min-h-screen {
+      min-height: 100dvh;
+    }
+  }
+  
+  /* Prevent iOS zoom on input focus */
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+  
+  /* Ensure input fields don't cause layout shift */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    font-size: 16px;
+  }
+  
+  /* Prevent horizontal overflow on all elements */
+  * {
+    max-width: 100%;
+  }
+  
+  /* Fix for framer-motion causing mobile jank */
+  [data-framer-component-type] {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+  }
+}
+
+/* ===== UTILITY: Smooth Scroll (Optional) ===== */
+@layer utilities {
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Fix for modal/overlay shaking */
+  .fixed-overlay {
+    position: fixed;
+    inset: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 }

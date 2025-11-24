@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   title: "TownWrent",
   description: "Connecting tenants with verified properties.",
   icons: {
-  icon: [
-    { url: "/logos/wrent1.png", type: "image/png" },
-    { url: "/logos/wrent1.png", rel: "shortcut icon" },
-  ],
-  apple: "/logos/wrent1.png",
-},
-
+    icon: [
+      { url: "/logos/wrent1.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logos/wrent1.png", sizes: "180x180" },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -31,9 +31,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

@@ -20,6 +20,12 @@ const fadeUp = {
 export default function HeroSection() {
   const router = useRouter()
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Prevent hydration issues
+  useState(() => {
+    setIsMounted(true)
+  })
 
   const handleListProperty = async () => {
     // Check if user is authenticated
@@ -49,6 +55,7 @@ export default function HeroSection() {
       className="relative min-h-screen flex flex-col justify-center items-center text-center px-6 text-white overflow-hidden"
       initial="hidden"
       animate="visible"
+      style={{ willChange: 'auto' }}
     >
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
@@ -58,26 +65,32 @@ export default function HeroSection() {
           fill
           className="object-cover"
           priority
+          sizes="100vw"
+          quality={85}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#006D77]/40 to-black/60" />
       </div>
 
-      {/* Floating Decorative Icons */}
-      <motion.div
-        className="absolute top-16 left-10 opacity-40 hidden md:block"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 6, repeat: Infinity }}
-      >
-        <Home className="h-12 w-12 text-[#FFD166]" />
-      </motion.div>
+      {/* Floating Decorative Icons - Only animate after mount */}
+      {isMounted && (
+        <>
+          <motion.div
+            className="absolute top-16 left-10 opacity-40 hidden md:block"
+            animate={{ y: [0, 15, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Home className="h-12 w-12 text-[#FFD166]" />
+          </motion.div>
 
-      <motion.div
-        className="absolute bottom-24 right-20 opacity-40 hidden md:block"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      >
-        <UserCheck className="h-12 w-12 text-[#83C5BE]" />
-      </motion.div>
+          <motion.div
+            className="absolute bottom-24 right-20 opacity-40 hidden md:block"
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <UserCheck className="h-12 w-12 text-[#83C5BE]" />
+          </motion.div>
+        </>
+      )}
 
       {/* Authentication Prompt Modal */}
       <AnimatePresence>
@@ -90,6 +103,7 @@ export default function HeroSection() {
               exit={{ opacity: 0 }}
               onClick={() => setShowAuthPrompt(false)}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              style={{ position: 'fixed' }}
             />
 
             {/* Modal */}

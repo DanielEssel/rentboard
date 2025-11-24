@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Menu, X, User, LogOut, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, User, LogOut, AlertCircle, UserPlus, LogIn } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase/client";
@@ -13,6 +13,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -22,6 +23,11 @@ export default function Navbar() {
     { label: "List Property", href: "/list-property" },
     { label: "Contact", href: "/contact" },
   ];
+
+  // Prevent hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Fetch user on load + listen to auth changes
   useEffect(() => {
@@ -52,6 +58,7 @@ export default function Navbar() {
       setShowAuthPrompt(true);
       return;
     }
+    setOpen(false);
     router.push(href);
   };
 
@@ -59,10 +66,18 @@ export default function Navbar() {
     router.push("/auth/login?returnTo=/list-property");
   };
 
+  const handleSignUp = () => {
+    router.push("/auth/signup?returnTo=/list-property");
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.refresh();
   };
+
+  if (!isMounted) {
+    return null; // Prevent SSR mismatch
+  }
 
   return (
     <>
@@ -80,6 +95,7 @@ export default function Navbar() {
             width={65}
             height={65}
             className="object-contain"
+            priority
           />
         </Link>
 
@@ -171,143 +187,197 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* --- MOBILE MENU --- */}
-{open && (
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    className="md:hidden fixed top-20 left-1/2 -translate-x-1/2 
-               w-[90%] bg-white shadow-xl rounded-2xl p-6 z-40"
-  >
-    <div className="flex flex-col gap-4">
-      {menuItems.map((item) => {
-        const isActive = pathname === item.href;
-
-        if (item.href === "/list-property") {
-          return (
-            <button
-              key={item.href}
-              onClick={() => handleProtectedNav(item.href)}
-              className={`text-lg font-medium text-left ${
-                isActive ? "text-[#006D77]" : "text-gray-700"
-              }`}
-            >
-              {item.label}
-            </button>
-          );
-        }
-
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => setOpen(false)}
-            className={`text-lg font-medium ${
-              isActive ? "text-[#006D77]" : "text-gray-700"
-            }`}
-          >
-            {item.label}
-          </Link>
-        );
-      })}
-
-      {/* ---- AUTH SECTION ---- */}
-      {!user ? (
-        <div className="flex flex-col gap-3 mt-4">
-          <Link
-            href="/auth/login"
-            onClick={() => setOpen(false)}
-            className="block p-3 rounded-lg border font-semibold text-[#006D77] text-center"
-          >
-            Login
-          </Link>
-
-          <Link
-            href="/auth/signup"
-            onClick={() => setOpen(false)}
-            className="block p-3 rounded-lg bg-[#FFD166] font-semibold text-[#006D77] text-center"
-          >
-            Sign Up
-          </Link>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3 mt-4">
-          <Link
-            href="/dashboard"
-            onClick={() => setOpen(false)}
-            className="block p-3 rounded-lg bg-gray-100"
-          >
-            Dashboard
-          </Link>
-
-          <button
-            onClick={() => {
-              handleLogout();
-              setOpen(false);
-            }}
-            className="flex items-center justify-center gap-2 p-3 rounded-lg bg-red-100 text-red-600"
-          >
-            <LogOut size={16} /> Logout
-          </button>
-        </div>
-      )}
-    </div>
-  </motion.div>
-)}
-
-
-      {/* ---- AUTH MODAL ---- */}
-      {showAuthPrompt && (
-        <>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {open && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-[999] bg-white text-gray-800 rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            className="md:hidden fixed top-20 left-1/2 -translate-x-1/2 
+                       w-[90%] bg-white shadow-xl rounded-2xl p-6 z-40"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 bg-[#FFD166]/20 rounded-full flex items-center justify-center">
-                <AlertCircle className="h-5 w-5 text-[#006D77]" />
-              </div>
-              <div className="flex-1 text-left">
-                <h3 className="font-bold text-lg text-[#006D77] mb-2">
-                  Sign In Required
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  You need to be signed in to continue.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleSignIn}
-                    className="flex-1 bg-[#006D77] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#005662] transition-colors"
+            <div className="flex flex-col gap-4">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.href;
+
+                if (item.href === "/list-property") {
+                  return (
+                    <button
+                      key={item.href}
+                      onClick={() => handleProtectedNav(item.href)}
+                      className={`text-lg font-medium text-left ${
+                        isActive ? "text-[#006D77]" : "text-gray-700"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium ${
+                      isActive ? "text-[#006D77]" : "text-gray-700"
+                    }`}
                   >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => setShowAuthPrompt(false)}
-                    className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                    {item.label}
+                  </Link>
+                );
+              })}
+
+              {/* AUTH SECTION */}
+              {!user ? (
+                <div className="flex flex-col gap-3 mt-4">
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setOpen(false)}
+                    className="block p-3 rounded-lg border font-semibold text-[#006D77] text-center"
                   >
-                    Cancel
+                    Login
+                  </Link>
+
+                  <Link
+                    href="/auth/signup"
+                    onClick={() => setOpen(false)}
+                    className="block p-3 rounded-lg bg-[#FFD166] font-semibold text-[#006D77] text-center"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3 mt-4">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className="block p-3 rounded-lg bg-gray-100"
+                  >
+                    Dashboard
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 p-3 rounded-lg bg-red-100 text-red-600"
+                  >
+                    <LogOut size={16} /> Logout
                   </button>
                 </div>
-              </div>
+              )}
             </div>
-            <button
-              onClick={() => setShowAuthPrompt(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
           </motion.div>
+        )}
+      </AnimatePresence>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => setShowAuthPrompt(false)}
-            className="fixed inset-0 bg-black/50 z-[998]"
-          />
-        </>
-      )}
+      {/* Auth Modal - Professional Design */}
+      <AnimatePresence>
+        {showAuthPrompt && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAuthPrompt(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998]"
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[999] w-[calc(100%-2rem)] sm:w-full max-w-md"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-4 sm:px-6 py-4 sm:py-5 relative">
+                  <div className="flex items-center gap-2 sm:gap-3 text-white">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <h3 className="font-bold text-base sm:text-lg">Authentication Required</h3>
+                      <p className="text-teal-100 text-xs sm:text-sm hidden sm:block">Please sign in to continue</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowAuthPrompt(false)}
+                    className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 sm:p-6">
+                  <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
+                    To list a property on TownWrent, you need to create an account or sign in.
+                  </p>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-2.5 sm:space-y-3">
+                    <button
+                      onClick={handleSignIn}
+                      className="w-full bg-[#006D77] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#005662] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl group text-sm sm:text-base"
+                    >
+                      <LogIn className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      Sign In
+                    </button>
+                    
+                    <button
+                      onClick={handleSignUp}
+                      className="w-full bg-white text-[#006D77] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group text-sm sm:text-base"
+                    >
+                      <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      Create Account
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="relative my-4 sm:my-5">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="px-3 bg-white text-gray-500 font-medium">OR</span>
+                    </div>
+                  </div>
+
+                  {/* Cancel Button */}
+                  <button
+                    onClick={() => setShowAuthPrompt(false)}
+                    className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors text-xs sm:text-sm py-2"
+                  >
+                    Continue Browsing
+                  </button>
+                </div>
+
+                {/* Footer */}
+                <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
+                  <p className="text-[10px] sm:text-xs text-gray-500 text-center leading-relaxed">
+                    By signing in, you agree to our{" "}
+                    <a href="/terms" className="text-[#006D77] hover:underline font-medium">
+                      Terms
+                    </a>{" "}
+                    and{" "}
+                    <a href="/privacy" className="text-[#006D77] hover:underline font-medium">
+                      Privacy Policy
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

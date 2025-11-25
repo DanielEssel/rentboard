@@ -35,7 +35,7 @@ export default function HeroSection() {
       // Show authentication prompt
       setShowAuthPrompt(true)
     } else {
-      // User is authenticated, proceed to list property
+      // User is authenticated, proceed to Post A Property
       router.push('/list-property')
     }
   }
@@ -137,7 +137,7 @@ export default function HeroSection() {
                 {/* Content */}
                 <div className="p-4 sm:p-6">
                   <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
-                    To list a property on TownWrent, you need to create an account or sign in.
+                    To Post A Property on TownWrent, you need to create an account or sign in.
                   </p>
 
                   {/* Action Buttons */}
@@ -218,14 +218,17 @@ export default function HeroSection() {
 
       {/* Call-to-Action Buttons */}
       <motion.div className="flex flex-wrap justify-center gap-4 z-10" variants={fadeUp}>
-        <CTAButton href="/explore" variant="primary">
+        <motion.div className="flex " whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}> 
+          <CTAButton href="/explore" variant="primary">
           Explore Homes
         </CTAButton>
+        </motion.div>
+        
         <button
           onClick={handleListProperty}
-          className="px-8 py-3 bg-white text-[#006D77] font-semibold rounded-lg shadow-lg hover:bg-[#EDF6F9] hover:scale-105 transition-all duration-300"
+          className="px-8 py-3 bg-white text-[#006D77] font-semibold rounded-lg shadow-lg hover:bg-[#EDF6F9] hover:scale-105 transition-all duration-300 cursor-pointer "
         >
-          List a Property
+          Post A Property
         </button>
       </motion.div>
 

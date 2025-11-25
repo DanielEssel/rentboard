@@ -16,6 +16,10 @@ export type Property = {
   description: string;
   created_at: string;
   updated_at: string;
+  views?: number
+favorites?: number
+isFavorited?: boolean
+
 };
 
 export type PropertyImage = {

@@ -12,9 +12,9 @@ import StatsSection from "@/components/StatsSection"
 
 /* Mock Data */
 const featuredProperties = [
-  { id: "1", title: "2-Bedroom Apartment in Bawjiase", price: 800, location: "Awutu Bawjiase", image: "/images/Mock4.jpg" },
-  { id: "2", title: "Single Room near Central Market", price: 400, location: "Awutu Bawjiase", image: "/images/Mock2.jpg" },
-  { id: "3", title: "Self-Contained Studio", price: 600, location: "Awutu Bawjiase", image: "/images/Mock3.jpg" },
+  { id: "1", title: "2-Bedroom Apartment in Bawjiase", price: 800, location: "Awutu Bawjiase", image: "/images/Mock4.jpg", views: 120, favorites: 8 },
+  { id: "2", title: "Single Room near Central Market", price: 400, location: "Awutu Bawjiase", image: "/images/Mock2.jpg", views: 75, favorites: 3 },
+  { id: "3", title: "Self-Contained Studio", price: 600, location: "Awutu Bawjiase", image: "/images/Mock3.jpg", views: 95, favorites: 5 },
 ]
 
 const features = [
@@ -119,7 +119,7 @@ export default function LandingPage() {
         </motion.h2>
         <div className="flex justify-center gap-4">
           <CTAButton href="/explore" variant="primary">Explore Homes</CTAButton>
-          <CTAButton href="/list-property" variant="secondary">List a Property</CTAButton>
+          <CTAButton href="/list-property" variant="secondary">Post A Property</CTAButton>
         </div>
       </motion.section>
 

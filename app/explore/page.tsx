@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import Link from "next/link"
 import Image from "next/image"
 import { getProperties, Property } from "@/lib/propertyApi"
+import PropertyCard from "@/components/PropertyCard"
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("")
@@ -174,7 +175,7 @@ export default function ExplorePage() {
               </h3>
               <button
                 onClick={clearFilters}
-                className="text-sm text-[#006D77] hover:text-[#005662] font-medium flex items-center gap-1"
+                className="text-sm text-[#a9eff5] hover:text-[#005662] font-medium flex items-center gap-1"
               >
                 <X className="w-4 h-4" />
                 Clear All
@@ -263,49 +264,25 @@ export default function ExplorePage() {
             className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
           >
             {filtered.map((property) => (
-              <Link 
-                key={property.id}
-                href={`/property/${property.id}`}
-                className="block"
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={(property as any).property_images?.[0]?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
-                      alt={property.title}
-                      className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {property.available && (
-                      <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                        <BadgeCheck className="w-3 h-3" />
-                        Available
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-semibold text-gray-800 text-lg mb-2 group-hover:text-[#006D77] transition-colors">
-                      {property.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mb-3">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      {property.town}, {property.region}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <p className="font-semibold text-[#006D77] text-lg">
-                        ₵{property.price} / {property.payment_frequency}
-                      </p>
-                      <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                        {property.property_type}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
+  <motion.div
+    key={property.id}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+  >
+    <PropertyCard property={{
+      id: property.id,
+      title: property.title,
+      price: property.price,
+      location: `${property.town}, ${property.region}`,
+      image: (property as any).property_images?.[0]?.image_url 
+          || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      views: property.views ?? 0,
+      favorites: property.favorites ?? 0,
+      isFavorited: property.isFavorited ?? false
+    }} />
+  </motion.div>
+))}
+
           </motion.div>
         ) : (
           <div className="text-center py-20 text-gray-500">

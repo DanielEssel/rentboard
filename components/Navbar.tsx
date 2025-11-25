@@ -7,6 +7,15 @@ import { Menu, X, User, LogOut, AlertCircle, UserPlus, LogIn } from "lucide-reac
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator
+} from "@/components/ui/dropdown-menu";
+
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -20,25 +29,19 @@ export default function Navbar() {
 
   const menuItems = [
     { label: "Explore", href: "/explore" },
-    { label: "List Property", href: "/list-property" },
+    { label: "Post A Property", href: "/list-property" },
     { label: "Contact", href: "/contact" },
   ];
 
-  // Prevent hydration issues
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
-  // Fetch user on load + listen to auth changes
   useEffect(() => {
     const loadUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
-
     loadUser();
 
-    // listen to sign in / sign out events
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
     });
@@ -62,141 +65,157 @@ export default function Navbar() {
     router.push(href);
   };
 
-  const handleSignIn = () => {
-    router.push("/auth/login?returnTo=/list-property");
-  };
-
-  const handleSignUp = () => {
-    router.push("/auth/signup?returnTo=/list-property");
-  };
+  const handleSignIn = () => router.push("/auth/login?returnTo=/list-property");
+  const handleSignUp = () => router.push("/auth/signup?returnTo=/list-property");
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.refresh();
   };
 
-  if (!isMounted) {
-    return null; // Prevent SSR mismatch
-  }
+  if (!isMounted) return null;
 
   return (
     <>
+      {/* NAVBAR */}
       <nav
         className={`fixed top-3 left-1/2 -translate-x-1/2 z-50 
-        w-[90%] max-w-5xl px-4 py-2 bg-white rounded-2xl flex items-center justify-between
+        w-[94%] sm:w-[90%] max-w-5xl px-3 sm:px-4 
+        bg-white rounded-2xl flex items-center justify-between
         transition-all duration-300
         ${scrolled ? "shadow-xl" : "shadow-md"}`}
       >
         {/* Logo */}
-        <Link href="/" className="inline-flex items-center">
+        <Link href="/" className="inline-flex items-center shrink-0">
           <Image
             src="/logos/wrent1.png"
             alt="Wrent Logo"
-            width={65}
-            height={65}
-            className="object-contain"
+            width={55}
+            height={55}
+            className="object-contain sm:w-[65px] sm:h-[65px]"
             priority
           />
         </Link>
-
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
-          <div className="flex gap-6">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href;
+<div className="hidden md:flex items-center gap-8">
+  {menuItems.map((item) => {
+    const isActive = pathname === item.href;
 
-              if (item.href === "/list-property") {
-                return (
-                  <button
-                    key={item.href}
-                    onClick={() => handleProtectedNav(item.href)}
-                    className={`font-medium transition-colors duration-300 ${
-                      isActive ? "text-[#006D77]" : "text-gray-600 hover:text-[#006D77]"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              }
+    if (item.href === "/list-property") {
+      return (
+        <button
+          key={item.href}
+          onClick={() => handleProtectedNav(item.href)}
+          className={`font-medium transition cursor-pointer ${
+            isActive ? "text-[#006D77]" : "text-gray-700 hover:text-[#006D77]"
+          }`}
+        >
+          {item.label}
+        </button>
+      );
+    }
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`font-medium transition-colors duration-300 ${
-                    isActive ? "text-[#006D77]" : "text-gray-600 hover:text-[#006D77]"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        className={`font-medium transition ${
+          isActive ? "text-[#006D77]" : "text-gray-700 hover:text-[#006D77]"
+        }`}
+      >
+        {item.label}
+      </Link>
+    );
+  })}
+</div>
 
-          {/* IF NOT LOGGED IN */}
-          {!user && (
-            <div className="flex rounded-full overflow-hidden shadow-sm border border-gray-200">
-              <Link
-                href="/auth/login"
-                className="px-5 py-2 bg-white text-[#006D77] font-semibold hover:bg-gray-50 transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="px-5 py-2 bg-[#FFD166] text-[#006D77] font-semibold hover:bg-[#ffc940] transition-colors"
-              >
-                Sign Up
-              </Link>
-            </div>
-          )}
 
-          {/* IF LOGGED IN → User Menu */}
-          {user && (
-            <div className="relative group">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-full border text-[#006D77] font-semibold hover:bg-teal-50 transition">
-                <User size={18} />
-                {user.email?.split("@")[0]}
-              </button>
+        {/* Desktop Auth Section */}
+{!user ? (
+  <div className="flex rounded-full overflow-hidden shadow-sm border border-gray-200">
+    <Link
+      href="/auth/login"
+      className="px-4 py-2 bg-white text-[#006D77] font-semibold hover:bg-gray-50"
+    >
+      Login
+    </Link>
+    <Link
+      href="/auth/signup"
+      className="px-4 py-2 bg-[#FFD166] text-[#006D77] font-semibold hover:bg-[#ffc940]"
+    >
+      Sign Up
+    </Link>
+  </div>
+) : (
+  <div className="relative w-fit">
+  <DropdownMenu modal={false}>
+    <DropdownMenuTrigger
+  className="outline-none data-[state=open]:bg-transparent !w-auto flex items-center gap-2"
+  asChild
+>
 
-              {/* Dropdown */}
-              <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition">
-                <Link
-                  href="/dashboard"
-                  className="block px-4 py-3 hover:bg-gray-50"
-                >
-                  Dashboard
-                </Link>
+      <div className="flex items-center gap-2 px-4 py-2 rounded-full border text-[#006D77] font-semibold hover:bg-teal-50 cursor-pointer">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src="/user.png" alt="User" />
+          <AvatarFallback>
+            {user.email?.charAt(0)?.toUpperCase() || "U"}
+          </AvatarFallback>
+        </Avatar>
+        {user.email?.split("@")[0]}
+      </div>
+    </DropdownMenuTrigger>
 
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-red-600"
-                >
-                  <LogOut size={16} /> Logout
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+    <DropdownMenuContent
+      align="end"
+      sideOffset={8}
+      className="w-48 rounded-xl shadow-xl bg-white"
+    >
+      <div className="px-3 py-2 text-sm">
+        <p className="font-medium text-gray-900">{user.email}</p>
+      </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => setOpen(!open)} className="text-[#006D77]">
-            {open ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
+      <DropdownMenuSeparator />
+
+      <DropdownMenuItem asChild>
+        <Link href="/dashboard" className="w-full cursor-pointer">
+          Dashboard
+        </Link>
+      </DropdownMenuItem>
+
+      <DropdownMenuSeparator />
+
+      <DropdownMenuItem
+        onClick={handleLogout}
+        className="text-red-600 cursor-pointer"
+      >
+        Logout
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+  </div>
+)}
+
+
+        {/* MOBILE MENU BUTTON */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-[#006D77] p-2 rounded-lg active:scale-95 transition"
+        >
+          {open ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-            className="md:hidden fixed top-20 left-1/2 -translate-x-1/2 
-                       w-[90%] bg-white shadow-xl rounded-2xl p-6 z-40"
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-[82px] left-1/2 -translate-x-1/2 
+                       w-[94%] sm:w-[90%] max-w-lg bg-white shadow-xl rounded-2xl 
+                       p-6 z-40"
           >
             <div className="flex flex-col gap-4">
               {menuItems.map((item) => {
@@ -208,7 +227,7 @@ export default function Navbar() {
                       key={item.href}
                       onClick={() => handleProtectedNav(item.href)}
                       className={`text-lg font-medium text-left ${
-                        isActive ? "text-[#006D77]" : "text-gray-700"
+                        isActive ? "text-[#006D77]" : "text-gray-800"
                       }`}
                     >
                       {item.label}
@@ -222,7 +241,7 @@ export default function Navbar() {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium ${
-                      isActive ? "text-[#006D77]" : "text-gray-700"
+                      isActive ? "text-[#006D77]" : "text-gray-800"
                     }`}
                   >
                     {item.label}
@@ -230,7 +249,7 @@ export default function Navbar() {
                 );
               })}
 
-              {/* AUTH SECTION */}
+              {/* Mobile Auth */}
               {!user ? (
                 <div className="flex flex-col gap-3 mt-4">
                   <Link
@@ -240,7 +259,6 @@ export default function Navbar() {
                   >
                     Login
                   </Link>
-
                   <Link
                     href="/auth/signup"
                     onClick={() => setOpen(false)}
@@ -254,7 +272,7 @@ export default function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setOpen(false)}
-                    className="block p-3 rounded-lg bg-gray-100"
+                    className="block p-3 rounded-lg bg-gray-100 text-center"
                   >
                     Dashboard
                   </Link>
@@ -275,11 +293,10 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Auth Modal - Professional Design */}
+      {/* AUTH MODAL — OPTIMIZED FOR SMALL SCREENS */}
       <AnimatePresence>
         {showAuthPrompt && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -288,61 +305,58 @@ export default function Navbar() {
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998]"
             />
 
-            {/* Modal */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[999] w-[calc(100%-2rem)] sm:w-full max-w-md"
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.4 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                         z-[999] w-[94%] max-w-md sm:w-full"
             >
               <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-4 sm:px-6 py-4 sm:py-5 relative">
-                  <div className="flex items-center gap-2 sm:gap-3 text-white">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="bg-gradient-to-r from-[#006D77] to-[#005662] px-5 py-5 relative">
+                  <div className="flex items-center gap-3 text-white">
+                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                      <AlertCircle className="h-5 w-5" />
                     </div>
-                    <div className="text-left flex-1">
-                      <h3 className="font-bold text-base sm:text-lg">Authentication Required</h3>
-                      <p className="text-teal-100 text-xs sm:text-sm hidden sm:block">Please sign in to continue</p>
+                    <div>
+                      <h3 className="font-bold text-lg">Authentication Required</h3>
+                      <p className="text-teal-100 text-sm hidden sm:block">Please sign in to continue</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setShowAuthPrompt(false)}
-                    className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+                    className="absolute top-4 right-4 text-white/80 hover:text-white"
                   >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
 
-                {/* Content */}
-                <div className="p-4 sm:p-6">
-                  <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
-                    To list a property on TownWrent, you need to create an account or sign in.
+                {/* Body */}
+                <div className="p-5">
+                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                    To Post A Property on TownWrent, you need to create an account or sign in.
                   </p>
 
-                  {/* Action Buttons */}
-                  <div className="space-y-2.5 sm:space-y-3">
+                  <div className="space-y-3">
                     <button
                       onClick={handleSignIn}
-                      className="w-full bg-[#006D77] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#005662] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl group text-sm sm:text-base"
+                      className="w-full bg-[#006D77] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#005662] flex items-center justify-center gap-2"
                     >
-                      <LogIn className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      <LogIn className="h-5 w-5" />
                       Sign In
                     </button>
-                    
+
                     <button
                       onClick={handleSignUp}
-                      className="w-full bg-white text-[#006D77] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group text-sm sm:text-base"
+                      className="w-full bg-white text-[#006D77] px-6 py-3 rounded-xl font-semibold border-2 border-[#006D77] hover:bg-[#006D77] hover:text-white flex items-center justify-center gap-2"
                     >
-                      <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      <UserPlus className="h-5 w-5" />
                       Create Account
                     </button>
                   </div>
 
-                  {/* Divider */}
-                  <div className="relative my-4 sm:my-5">
+                  <div className="relative my-5">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-200"></div>
                     </div>
@@ -351,26 +365,24 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Cancel Button */}
                   <button
                     onClick={() => setShowAuthPrompt(false)}
-                    className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors text-xs sm:text-sm py-2"
+                    className="w-full text-gray-600 font-medium py-2 text-sm"
                   >
                     Continue Browsing
                   </button>
                 </div>
 
-                {/* Footer */}
-                <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
-                  <p className="text-[10px] sm:text-xs text-gray-500 text-center leading-relaxed">
+                <div className="bg-gray-50 px-5 py-4 border-t border-gray-100">
+                  <p className="text-xs text-gray-500 text-center">
                     By signing in, you agree to our{" "}
-                    <a href="/terms" className="text-[#006D77] hover:underline font-medium">
+                    <Link href="/terms" className="text-[#006D77] font-medium hover:underline">
                       Terms
-                    </a>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <a href="/privacy" className="text-[#006D77] hover:underline font-medium">
+                    <Link href="/privacy" className="text-[#006D77] font-medium hover:underline">
                       Privacy Policy
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </div>

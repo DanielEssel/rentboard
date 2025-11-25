@@ -113,7 +113,7 @@ export default function SelectUserPage() {
               I'm a Landlord
             </h3>
             <p className="text-xs text-gray-600 text-center">
-              Want to list properties
+              Want to Add Propertyperties
             </p>
           </motion.div>
         </div>

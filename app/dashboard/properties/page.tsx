@@ -25,19 +25,31 @@ export default function PropertiesPage() {
   }, []);
 
   const fetchProperties = async () => {
-    setLoading(true);
+  setLoading(true);
 
-    const { data, error } = await supabase
-      .from("properties")
-      .select("*, property_images(image_url)")
-      .order("created_at", { ascending: false });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    if (!error && data) {
-      setProperties(data as Property[]);
-    }
-
+  if (!user) {
+    setProperties([]);
     setLoading(false);
-  };
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*, property_images(image_url)")
+    .eq("user_id", user.id) // ← THIS IS THE FIX
+    .order("created_at", { ascending: false });
+
+  if (!error && data) {
+    setProperties(data as Property[]);
+  }
+
+  setLoading(false);
+};
+
 
   return (
     <div className="space-y-8">

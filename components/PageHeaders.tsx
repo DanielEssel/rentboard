@@ -37,11 +37,11 @@ export default function Navbar() {
         
         {/* Back Button */}
         <Link 
-          href="/" 
+          href="/explore" 
           className="flex items-center gap-2 text-[#006D77] hover:text-[#005662] transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span className="font-semibold">Back to Home</span>
+          <span className="font-semibold">Back</span>
         </Link>
 
         {/* Logo */}

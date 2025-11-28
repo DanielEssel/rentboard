@@ -113,7 +113,7 @@ export default function EditPropertyPage() {
   const fetchProperty = async () => {
     try {
       setError(null);
-      
+
       const { data, error: fetchError } = await supabase
         .from("properties")
         .select("*, property_images(id, image_url, property_id)")
@@ -208,7 +208,12 @@ export default function EditPropertyPage() {
       setError(null);
 
       // Validation
-      if (!title.trim() || !town.trim() || !region.trim() || !description.trim()) {
+      if (
+        !title.trim() ||
+        !town.trim() ||
+        !region.trim() ||
+        !description.trim()
+      ) {
         throw new Error("Please fill in all required fields");
       }
 
@@ -327,21 +332,37 @@ export default function EditPropertyPage() {
           <h2 className="text-lg font-semibold mb-4">Property Images</h2>
 
           {images.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {images.map((img) => (
-                <div key={img.id} className="relative group">
+                <div
+                  key={img.id}
+                  className="relative rounded-lg overflow-hidden group border"
+                >
+                  {/* Image */}
                   <Image
                     src={img.image_url}
-                    width={300}
-                    height={200}
+                    width={500}
+                    height={400}
                     alt="Property Image"
-                    className="rounded-lg object-cover h-40 w-full"
+                    className="object-cover w-full h-40 md:h-48"
                   />
+
+                  {/* Delete Button */}
                   <button
                     onClick={() => handleDeleteImage(img.id, img.image_url)}
-                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition text-sm font-medium"
+                    className="
+                absolute top-2 right-2 
+                bg-red-600 text-white 
+                rounded-full 
+                p-2 
+                shadow 
+                opacity-90 
+                hover:opacity-100
+                active:scale-95
+                transition
+              "
                   >
-                    Remove
+                    ✕
                   </button>
                 </div>
               ))}
@@ -351,7 +372,7 @@ export default function EditPropertyPage() {
           )}
 
           {/* Upload New Images */}
-          <div>
+          <div className="mt-4">
             <label className="block text-sm font-medium mb-2">
               Add More Images
             </label>
@@ -457,7 +478,9 @@ export default function EditPropertyPage() {
               </label>
               <Select
                 onValueChange={(val) =>
-                  setPaymentFrequency(val as "monthly" | "yearly" | "negotiable")
+                  setPaymentFrequency(
+                    val as "monthly" | "yearly" | "negotiable"
+                  )
                 }
                 value={paymentFrequency}
               >

@@ -156,21 +156,22 @@ export default function PostPropertyPage() {
     
     setLoading(true);
     try {
-      await createProperty({
-        title: form.title,
-        property_type: form.propertyType as string,
-        price: parseFloat(form.price),
-        payment_frequency: form.paymentFrequency,
-        available: form.available,
-        region: form.region,
-        town: form.town,
-        landmark: form.landmark,
-        amenities: form.amenities,
-        description: form.description,
-        images: form.images,
-      });
-      
-      router.push("/?msg=property_submitted");
+      const propertyId = await createProperty({
+  title: form.title,
+  property_type: form.propertyType as string,
+  price: parseFloat(form.price),
+  payment_frequency: form.paymentFrequency,
+  available: form.available,
+  region: form.region,
+  town: form.town,
+  landmark: form.landmark,
+  amenities: form.amenities,
+  description: form.description,
+  images: form.images,
+});
+
+router.push(`/property/success?propertyId=${propertyId}`);
+
     } catch (error) {
       console.error('Error submitting property:', error);
       

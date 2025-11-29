@@ -31,12 +31,11 @@ export type PropertyImage = {
 };
 
 
-// POST - Create a new property
 export async function createProperty(data: {
   title: string;
   property_type: string;
   price: number;
-  payment_frequency: 'monthly' | 'yearly' | 'negotiable';
+  payment_frequency: "monthly" | "yearly" | "negotiable";
   available: boolean;
   region: string;
   town: string;
@@ -46,13 +45,16 @@ export async function createProperty(data: {
   images: File[];
 }) {
   try {
-    // 1. Get current user
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('User not authenticated');
+    // 1. Get logged-in user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // 2. Insert property
+    if (!user) throw new Error("User not authenticated");
+
+    // 2. Insert property and RETURN id
     const { data: property, error: propertyError } = await supabase
-      .from('properties')
+      .from("properties")
       .insert({
         user_id: user.id,
         title: data.title,
@@ -66,43 +68,44 @@ export async function createProperty(data: {
         amenities: data.amenities,
         description: data.description,
       })
-      .select()
+      .select("id") // 🔥 ensure ID is returned
       .single();
 
     if (propertyError) throw propertyError;
 
+    const propertyId = property.id;
+
     // 3. Upload images
-    const imageUrls: string[] = [];
     for (let i = 0; i < data.images.length; i++) {
       const file = data.images[i];
-      const fileName = `${user.id}/${property.id}/${Date.now()}-${i}.${file.name.split('.').pop()}`;
-      
+
+      // The path stored in DB MUST be relative, not public URL
+      const filePath = `${user.id}/${propertyId}/${Date.now()}-${i}.${
+        file.name.split(".").pop() || "jpg"
+      }`;
+
       const { error: uploadError } = await supabase.storage
-        .from('property-images')
-        .upload(fileName, file);
+        .from("property-images")
+        .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('property-images')
-        .getPublicUrl(fileName);
-
-      imageUrls.push(publicUrl);
-
-      // Insert image record
-      await supabase.from('property_images').insert({
-        property_id: property.id,
-        image_url: publicUrl,
+      // Insert image record using the storage path
+      await supabase.from("property_images").insert({
+        property_id: propertyId,
+        image_url: filePath, // 🔥 store ONLY path
         display_order: i,
       });
     }
 
-    return { property, imageUrls };
+    // 4. Return the propertyId so redirect works
+    return propertyId;
   } catch (error) {
-    console.error('Error creating property:', error);
+    console.error("Error creating property:", error);
     throw error;
   }
 }
+
 
 // GET - Fetch all properties
 export async function getProperties(filters?: {

@@ -8,6 +8,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { getProperties, Property } from "@/lib/propertyApi"
 import PropertyCard from "@/components/PropertyCard"
+import { supabase } from "@/lib/supabase/client"
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("")
@@ -21,6 +22,24 @@ export default function ExplorePage() {
   const [propertyType, setPropertyType] = useState<string>("all")
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [bedroomCount, setBedroomCount] = useState<string>("all")
+
+  // Helper function to get valid image URL
+  const getValidImageUrl = (imageUrl: string | undefined | null): string => {
+    if (!imageUrl) return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    
+    // If it's already a full URL, return it
+    if (imageUrl.startsWith("http")) return imageUrl;
+    
+    // If it's a Supabase path, convert it to public URL
+    try {
+      const publicUrl = supabase.storage
+        .from("property-images")
+        .getPublicUrl(imageUrl).data.publicUrl;
+      return publicUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    } catch {
+      return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    }
+  }
 
   // Fetch properties on mount
   useEffect(() => {
@@ -175,7 +194,7 @@ export default function ExplorePage() {
               </h3>
               <button
                 onClick={clearFilters}
-                className="text-sm text-[#a9eff5] hover:text-[#005662] font-medium flex items-center gap-1"
+                className="text-sm text-[#006D77] hover:text-[#005662] font-medium flex items-center gap-1"
               >
                 <X className="w-4 h-4" />
                 Clear All
@@ -263,26 +282,33 @@ export default function ExplorePage() {
             layout
             className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {filtered.map((property) => (
-  <motion.div
-    key={property.id}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-  >
-    <PropertyCard property={{
-      id: property.id,
-      title: property.title,
-      price: property.price,
-      location: `${property.town}, ${property.region}`,
-      image: (property as any).property_images?.[0]?.image_url 
-          || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-      views: property.views ?? 0,
-      favorites: property.favorites ?? 0,
-      isFavorited: property.isFavorited ?? false
-    }} />
-  </motion.div>
-))}
+            {filtered.map((property) => {
+              // Get the first image URL safely
+              const imageUrl = getValidImageUrl(
+                (property as any).property_images?.[0]?.image_url
+              );
 
+              return (
+                <motion.div
+                  key={property.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <PropertyCard 
+                    property={{
+                      id: property.id,
+                      title: property.title,
+                      price: property.price,
+                      location: `${property.town}, ${property.region}`,
+                      image: imageUrl,
+                      views: property.views ?? 0,
+                      favorites: property.favorites ?? 0,
+                      isFavorited: property.isFavorited ?? false
+                    }} 
+                  />
+                </motion.div>
+              );
+            })}
           </motion.div>
         ) : (
           <div className="text-center py-20 text-gray-500">

@@ -106,6 +106,30 @@ export default function EditPropertyPage() {
   // Delete modal
   const [confirmDelete, setConfirmDelete] = useState(false);
 
+  // Helper function to convert Supabase storage paths to public URLs
+  const getPublicImageUrl = (imagePath: string | undefined | null): string => {
+    if (!imagePath) {
+      return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    }
+
+    // If it's already a full URL, return it
+    if (imagePath.startsWith("http")) {
+      return imagePath;
+    }
+
+    // Convert Supabase storage path to public URL
+    try {
+      const { data } = supabase.storage
+        .from("property-images")
+        .getPublicUrl(imagePath);
+      
+      return data?.publicUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    } catch (error) {
+      console.error("Error getting public URL:", error);
+      return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+    }
+  };
+
   useEffect(() => {
     fetchProperty();
   }, [id]);
@@ -124,7 +148,13 @@ export default function EditPropertyPage() {
 
       if (data) {
         setProperty(data as Property);
-        setImages((data.property_images || []) as PropertyImage[]);
+        
+        // Convert image URLs to public URLs
+        const processedImages = (data.property_images || []).map((img: any) => ({
+          ...img,
+          image_url: getPublicImageUrl(img.image_url),
+        }));
+        setImages(processedImages as PropertyImage[]);
 
         // Populate form
         setTitle(data.title);
@@ -159,15 +189,12 @@ export default function EditPropertyPage() {
 
       if (storageError) throw storageError;
 
-      const publicUrl = supabase.storage
-        .from("property-images")
-        .getPublicUrl(filePath).data.publicUrl;
-
+      // Store the storage path, not the public URL
       const { error: insertError } = await supabase
         .from("property_images")
         .insert({
           property_id: id,
-          image_url: publicUrl,
+          image_url: filePath, // Store path instead of full URL
         });
 
       if (insertError) throw insertError;
@@ -180,12 +207,18 @@ export default function EditPropertyPage() {
   const handleDeleteImage = async (imageId: string, imageUrl: string) => {
     try {
       // Extract file path from URL
-      const urlParts = imageUrl.split("/property-images/");
-      if (urlParts.length > 1) {
-        const filePath = urlParts[1];
-        await supabase.storage.from("property-images").remove([filePath]);
+      let filePath = imageUrl;
+      
+      // If it's a full URL, extract the path
+      if (imageUrl.includes("/property-images/")) {
+        const urlParts = imageUrl.split("/property-images/");
+        filePath = urlParts[1];
       }
 
+      // Delete from storage
+      await supabase.storage.from("property-images").remove([filePath]);
+
+      // Delete from database
       const { error } = await supabase
         .from("property_images")
         .delete()
@@ -245,7 +278,7 @@ export default function EditPropertyPage() {
 
       if (updateError) throw updateError;
 
-      router.push("/dashboard");
+      router.push("/dashboard/properties");
     } catch (err: any) {
       setError(err.message || "Failed to save property");
       console.error("Error saving property:", err);
@@ -262,11 +295,15 @@ export default function EditPropertyPage() {
 
       // Delete images from storage
       for (const img of images) {
-        const urlParts = img.image_url.split("/property-images/");
-        if (urlParts.length > 1) {
-          const filePath = urlParts[1];
-          await supabase.storage.from("property-images").remove([filePath]);
+        let filePath = img.image_url;
+        
+        // If it's a full URL, extract the path
+        if (img.image_url.includes("/property-images/")) {
+          const urlParts = img.image_url.split("/property-images/");
+          filePath = urlParts[1];
         }
+        
+        await supabase.storage.from("property-images").remove([filePath]);
       }
 
       // Delete property (CASCADE will handle property_images table)
@@ -277,7 +314,7 @@ export default function EditPropertyPage() {
 
       if (deleteError) throw deleteError;
 
-      router.push("/dashboard");
+      router.push("/dashboard/properties");
     } catch (err: any) {
       setError(err.message || "Failed to delete property");
       console.error("Error deleting property:", err);
@@ -339,28 +376,31 @@ export default function EditPropertyPage() {
                   className="relative rounded-lg overflow-hidden group border"
                 >
                   {/* Image */}
-                  <Image
-                    src={img.image_url}
-                    width={500}
-                    height={400}
-                    alt="Property Image"
-                    className="object-cover w-full h-40 md:h-48"
-                  />
+                  <div className="relative w-full h-40 md:h-48 bg-gray-200">
+                    <Image
+                      src={img.image_url}
+                      fill
+                      alt="Property Image"
+                      className="object-cover"
+                      unoptimized={img.image_url.includes('supabase')}
+                    />
+                  </div>
 
                   {/* Delete Button */}
                   <button
                     onClick={() => handleDeleteImage(img.id, img.image_url)}
                     className="
-                absolute top-2 right-2 
-                bg-red-600 text-white 
-                rounded-full 
-                p-2 
-                shadow 
-                opacity-90 
-                hover:opacity-100
-                active:scale-95
-                transition
-              "
+                      absolute top-2 right-2 
+                      bg-red-600 text-white 
+                      rounded-full 
+                      w-8 h-8
+                      flex items-center justify-center
+                      shadow-lg 
+                      opacity-90 
+                      hover:opacity-100
+                      active:scale-95
+                      transition
+                    "
                   >
                     ✕
                   </button>
@@ -461,7 +501,7 @@ export default function EditPropertyPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Price (GHS) *
+                Price (₵) *
               </label>
               <Input
                 type="number"

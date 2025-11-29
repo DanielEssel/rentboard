@@ -251,7 +251,7 @@ export default function PropertyDetail({
 
   /* RENDER */
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 lg:pb-0">
+    <div className={`min-h-screen ${showPublicUI ? 'bg-gray-50 pb-20 lg:pb-0' : 'bg-transparent'}`}>
       {showPublicUI && (
         <div className="sticky top-0 bg-white/95 backdrop-blur-md z-20 border-b border-gray-200">
           <PageHeaders />
@@ -359,7 +359,7 @@ export default function PropertyDetail({
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className={`${showPublicUI ? 'max-w-7xl' : 'max-w-7xl'} mx-auto ${showPublicUI ? 'px-4 sm:px-6 lg:px-8 py-8 sm:py-12' : ''}`}>
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
 
           {/* LEFT COLUMN */}
@@ -405,12 +405,23 @@ export default function PropertyDetail({
               </div>
 
               {mode === "dashboard" && (
-                <Button
-                  className="mt-6 w-full sm:w-auto"
-                  onClick={() => router.push(`/dashboard/properties/${property.id}/edit`)}
-                >
-                  Edit Property Details
-                </Button>
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      className="flex-1 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700"
+                      onClick={() => router.push(`/dashboard/edit/${property.id}`)}
+                    >
+                      Edit Property Details
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1 border-gray-300 hover:bg-gray-50"
+                      onClick={() => window.open(`/property/${property.id}`, '_blank')}
+                    >
+                      View Public Page
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
 
@@ -472,8 +483,8 @@ export default function PropertyDetail({
             )}
           </div>
 
-          {/* RIGHT COLUMN - CONTACT CARD */}
-          {showPublicUI && (
+          {/* RIGHT COLUMN - CONTACT CARD OR DASHBOARD STATS */}
+          {showPublicUI ? (
             <div className="hidden lg:block relative">
               <div className="sticky top-28">
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-100">
@@ -546,6 +557,127 @@ export default function PropertyDetail({
                   <p className="text-xs text-gray-500 text-center mt-4">
                     Response time: Usually within 24 hours
                   </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="hidden lg:block relative">
+              <div className="sticky top-28 space-y-6">
+                {/* Property Stats Card */}
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Star className="w-5 h-5 text-teal-600" />
+                    Property Performance
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-600">Total Views</span>
+                        <Heart className="w-4 h-4 text-teal-600" />
+                      </div>
+                      <p className="text-3xl font-bold text-teal-700">0</p>
+                      <p className="text-xs text-gray-500 mt-1">Last 30 days</p>
+                    </div>
+
+                    <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-600">Favorites</span>
+                        <Heart className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <p className="text-3xl font-bold text-purple-700">0</p>
+                      <p className="text-xs text-gray-500 mt-1">Total saves</p>
+                    </div>
+
+                    <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-600">Messages</span>
+                        <MessageSquare className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <p className="text-3xl font-bold text-blue-700">0</p>
+                      <p className="text-xs text-gray-500 mt-1">Inquiries received</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Actions Card */}
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+                  
+                  <div className="space-y-3">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
+                      onClick={() => router.push(`/dashboard/edit/${property.id}/edit`)}
+                    >
+                      <div className="w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center">
+                        <Home className="w-4 h-4 text-teal-600" />
+                      </div>
+                      Edit Details
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
+                      onClick={() => window.open(`/property/${property.id}`, '_blank')}
+                    >
+                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <Share2 className="w-4 h-4 text-blue-600" />
+                      </div>
+                      View Public Page
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
+                      onClick={handleShare}
+                    >
+                      <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                        <Share2 className="w-4 h-4 text-green-600" />
+                      </div>
+                      Share Property
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Property Status Card */}
+                <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                  <h3 className="text-sm font-semibold text-gray-600 mb-3">PROPERTY STATUS</h3>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Availability</span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        property.available 
+                          ? "bg-green-100 text-green-700" 
+                          : "bg-red-100 text-red-700"
+                      }`}>
+                        {property.available ? "Available" : "Unavailable"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Listed On</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {new Date(property.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Last Updated</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {new Date(property.updated_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

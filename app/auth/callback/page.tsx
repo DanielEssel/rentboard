@@ -12,22 +12,33 @@ function CallbackContent() {
     const processSession = async () => {
       try {
         const returnTo = params.get("returnTo") || "/";
-        const { data, error } = await supabase.auth.getSession();
 
-        if (error) {
-          console.error("Auth error:", error);
-          router.push("/auth/login");
-          return;
+        // 🔥 Wait for Supabase to fully write the session to localStorage
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // 🔥 Get session
+        const { data } = await supabase.auth.getSession();
+
+        // 🔥 Restore form draft (if any)
+        const savedForm = localStorage.getItem("postPropertyForm");
+        const savedStep = localStorage.getItem("postPropertyStep");
+
+        if (savedForm) {
+          localStorage.setItem("postPropertyForm", savedForm);
+        }
+        if (savedStep) {
+          localStorage.setItem("postPropertyStep", savedStep);
         }
 
+        // 🔥 Redirect depending on session status
         if (data.session) {
-          router.push(returnTo);
+          router.replace(returnTo); // correct redirect
         } else {
-          router.push("/auth/login");
+          router.replace("/auth/login");
         }
       } catch (err) {
-        console.error("Unexpected error:", err);
-        router.push("/auth/login");
+        console.error("Callback error:", err);
+        router.replace("/auth/login");
       }
     };
 
@@ -36,9 +47,9 @@ function CallbackContent() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="text-center">
-        <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-        <p className="text-lg">Signing you in...</p>
+      <div className="text-center animate-pulse">
+        <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-teal-600 border-r-transparent" />
+        <p className="text-lg text-gray-700">Finalizing login...</p>
       </div>
     </div>
   );
@@ -46,11 +57,13 @@ function CallbackContent() {
 
 export default function AuthCallback() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-lg">Loading...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <p className="text-lg">Loading...</p>
+        </div>
+      }
+    >
       <CallbackContent />
     </Suspense>
   );

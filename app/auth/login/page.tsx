@@ -18,55 +18,57 @@ function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (error) throw error
+    if (error) throw error;
 
-      router.push(returnTo)
-      router.refresh()
-    } catch (error: any) {
-      setError(error.message || "Failed to sign in. Please check your credentials.")
-    } finally {
-      setLoading(false)
-    }
+    router.replace(`/auth/callback?returnTo=${returnTo}`);
+  } catch (error: any) {
+    setError(error.message || "Failed to sign in.");
+  } finally {
+    setLoading(false);
   }
+};
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
-        }
-      })
-      if (error) throw error
-    } catch (error: any) {
-      setError(error.message || "Failed to sign in with Google.")
-    }
+
+ const handleGoogleSignIn = async () => {
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
+      }
+    });
+    if (error) throw error;
+  } catch (error: any) {
+    setError(error.message || "Failed to sign in with Google.");
   }
+};
+
 
   const handleFacebookSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
-        }
-      })
-      if (error) throw error
-    } catch (error: any) {
-      setError(error.message || "Failed to sign in with Facebook.")
-    }
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "facebook",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
+      }
+    });
+    if (error) throw error;
+  } catch (error: any) {
+    setError(error.message || "Failed to sign in with Facebook.");
   }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-yellow-50 p-4">

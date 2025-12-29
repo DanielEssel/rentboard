@@ -3,11 +3,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import {  Image as ImageIcon, Loader2 } from "lucide-react";
+import { Image as ImageIcon, Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import PageHeaders from "@/components/PageHeaders";
 import { createProperty } from "@/lib/propertyApi";
 import { supabase } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
+import AuthModal from "@/components/AuthModal";
 
 type PropertyType =
   | "Apartment"
@@ -55,7 +57,7 @@ export default function PostPropertyPage() {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -75,26 +77,47 @@ export default function PostPropertyPage() {
 
   const [previews, setPreviews] = useState<string[]>([]);
 
-  // Protected Route: Check Authentication
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) {
-          // Redirect to login with return URL
-          router.push('/auth/login?returnTo=/list-property');
-        } else {
-          setCheckingAuth(false);
-        }
-      } catch (error) {
-        console.error('Auth check error:', error);
-        router.push('/auth/login?returnTo=/list-property');
-      }
-    };
+  // Optional: store user session
+  const [user, setUser] = useState<User | null>(null);
 
-    checkAuth();
-  }, [router]);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+  }, []);
+
+  // Restore form + step from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("postPropertyForm");
+      const savedStep = localStorage.getItem("postPropertyStep");
+
+      if (saved) {
+        setForm((prev) => ({
+          ...prev,
+          ...JSON.parse(saved),
+          images: [], // images cannot persist, browser security
+        }));
+      }
+
+      if (savedStep) {
+        setStep(Number(savedStep));
+      }
+    } catch (err) {
+      console.error("Failed to restore form:", err);
+    }
+  }, []);
+
+  // Persist form & step on change
+  useEffect(() => {
+    try {
+      const safeForm = { ...form, images: [] }; // images can't be stored
+      localStorage.setItem("postPropertyForm", JSON.stringify(safeForm));
+      localStorage.setItem("postPropertyStep", String(step));
+    } catch (err) {
+      console.error("Failed to save form:", err);
+    }
+  }, [form, step]);
 
   useEffect(() => {
     const urls = form.images.map((f) => URL.createObjectURL(f));
@@ -152,51 +175,60 @@ export default function PostPropertyPage() {
   const back = () => setStep((p) => Math.max(1, p - 1));
 
   const submitProperty = async () => {
+    // Validate final step before submission
     if (!validateStep(3)) return;
-    
+
+    // Check if user is logged in
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // ⛔ USER NOT LOGGED IN
+    if (!user) {
+      // 🔥 Save form + step BEFORE opening modal
+      try {
+        const safeForm = { ...form, images: [] }; // cannot save images
+        localStorage.setItem("postPropertyForm", JSON.stringify(safeForm));
+        localStorage.setItem("postPropertyStep", String(step));
+      } catch (err) {
+        console.error("Failed saving draft before auth:", err);
+      }
+
+      // Show auth modal
+      setShowAuthPrompt(true);
+      return;
+    }
+
+    // ✔ USER LOGGED IN → Submit normally
     setLoading(true);
+
     try {
       const propertyId = await createProperty({
-  title: form.title,
-  property_type: form.propertyType as string,
-  price: parseFloat(form.price),
-  payment_frequency: form.paymentFrequency,
-  available: form.available,
-  region: form.region,
-  town: form.town,
-  landmark: form.landmark,
-  amenities: form.amenities,
-  description: form.description,
-  images: form.images,
-});
+        title: form.title,
+        property_type: form.propertyType,
+        price: parseFloat(form.price),
+        payment_frequency: form.paymentFrequency,
+        available: form.available,
+        region: form.region,
+        town: form.town,
+        landmark: form.landmark,
+        amenities: form.amenities,
+        description: form.description,
+        images: form.images,
+      });
 
-router.push(`/property/success?propertyId=${propertyId}`);
+      // Clear draft on success
+      localStorage.removeItem("postPropertyForm");
+      localStorage.removeItem("postPropertyStep");
 
+      router.push(`/success?propertyId=${propertyId}`);
     } catch (error) {
-      console.error('Error submitting property:', error);
-      
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : 'Failed to submit property. Please try again.';
-      
-      setErrors({ submit: errorMessage });
-      alert(errorMessage);
+      console.error("Error submitting property:", error);
+      alert("Failed to submit property");
     } finally {
       setLoading(false);
     }
   };
-
-  // Show loading screen while checking authentication
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#006D77] mx-auto mb-4" />
-          <p className="text-gray-600">Verifying authentication...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -215,7 +247,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
 
           <div className="text-right">
             <div className="text-xs text-gray-500">Step</div>
-            <div className="text-lg font-semibold text-[#006D77]">{step} / 3</div>
+            <div className="text-lg font-semibold text-[#006D77]">
+              {step} / 3
+            </div>
           </div>
         </div>
 
@@ -260,7 +294,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                       onChange={(e) => update("title", e.target.value)}
                     />
                     {errors.title && (
-                      <span className="text-xs text-red-500 mt-1">{errors.title}</span>
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.title}
+                      </span>
                     )}
                   </label>
 
@@ -268,7 +304,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                     <span className="text-sm text-gray-700">Property Type</span>
                     <select
                       className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
-                        errors.propertyType ? "border-red-400" : "border-gray-200"
+                        errors.propertyType
+                          ? "border-red-400"
+                          : "border-gray-200"
                       }`}
                       value={form.propertyType}
                       onChange={(e) =>
@@ -281,7 +319,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                       ))}
                     </select>
                     {errors.propertyType && (
-                      <span className="text-xs text-red-500 mt-1">{errors.propertyType}</span>
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.propertyType}
+                      </span>
                     )}
                   </label>
 
@@ -297,7 +337,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                       onChange={(e) => update("price", e.target.value)}
                     />
                     {errors.price && (
-                      <span className="text-xs text-red-500 mt-1">{errors.price}</span>
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.price}
+                      </span>
                     )}
                   </label>
 
@@ -338,7 +380,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                       onChange={(e) => update("region", e.target.value)}
                     />
                     {errors.region && (
-                      <span className="text-xs text-red-500 mt-1">{errors.region}</span>
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.region}
+                      </span>
                     )}
                   </label>
 
@@ -353,7 +397,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                       onChange={(e) => update("town", e.target.value)}
                     />
                     {errors.town && (
-                      <span className="text-xs text-red-500 mt-1">{errors.town}</span>
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.town}
+                      </span>
                     )}
                   </label>
 
@@ -408,7 +454,9 @@ router.push(`/property/success?propertyId=${propertyId}`);
                     onChange={(e) => update("description", e.target.value)}
                   />
                   {errors.description && (
-                    <span className="text-xs text-red-500 mt-1">{errors.description}</span>
+                    <span className="text-xs text-red-500 mt-1">
+                      {errors.description}
+                    </span>
                   )}
                 </label>
 
@@ -451,6 +499,14 @@ router.push(`/property/success?propertyId=${propertyId}`);
               </>
             )}
           </motion.div>
+          <AuthModal
+            open={showAuthPrompt}
+            onClose={() => setShowAuthPrompt(false)}
+            onSuccess={() => {
+              setShowAuthPrompt(false);
+              router.push("/list-property");
+            }}
+          />
 
           {/* Navigation Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3">

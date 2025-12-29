@@ -23,52 +23,53 @@ function SignupForm() {
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+  e.preventDefault()
+  setLoading(true)
+  setError("")
 
-    // Validate password strength
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long")
-      setLoading(false)
-      return
-    }
-
-    // Validate terms agreement
-    if (!formData.agreeToTerms) {
-      setError("Please agree to the Terms of Service and Privacy Policy")
-      setLoading(false)
-      return
-    }
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            full_name: formData.fullName,
-          },
-        },
-      })
-
-      if (error) throw error
-
-      // Check if email confirmation is required
-      if (data.user && data.user.identities && data.user.identities.length === 0) {
-        setError("An account with this email already exists. Please sign in instead.")
-        return
-      }
-
-      // Success - show message and redirect
-      alert("Account created successfully! Please check your email to verify your account.")
-      router.push('/auth/login')
-    } catch (error: any) {
-      setError(error.message || "Failed to create account. Please try again.")
-    } finally {
-      setLoading(false)
-    }
+  // Validate password strength
+  if (formData.password.length < 6) {
+    setError("Password must be at least 6 characters long")
+    setLoading(false)
+    return
   }
+
+  if (!formData.agreeToTerms) {
+    setError("Please agree to the Terms of Service and Privacy Policy")
+    setLoading(false)
+    return
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        data: {
+          full_name: formData.fullName,
+        },
+        // SUPER IMPORTANT
+        emailRedirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
+      },
+    })
+
+    if (error) throw error
+
+    // If email confirmation is enabled
+    if (data.user && !data.session) {
+      alert("Account created! Please verify your email to continue.")
+      return
+    }
+
+    // If direct sign-in allowed after signup → send user to callback
+    router.replace(`/auth/callback?returnTo=${returnTo}`)
+
+  } catch (error: any) {
+    setError(error.message || "Failed to create account. Please try again.")
+  } finally {
+    setLoading(false)
+  }
+}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target

@@ -9,6 +9,7 @@ import Image from "next/image"
 import { getProperties, Property } from "@/lib/propertyApi"
 import PropertyCard from "@/components/PropertyCard"
 import { supabase } from "@/lib/supabase/client"
+import Page from "../success/page"
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("")
@@ -41,23 +42,26 @@ export default function ExplorePage() {
     }
   }
 
-  // Fetch properties on mount
   useEffect(() => {
-    loadProperties()
-  }, [])
-
-  const loadProperties = async () => {
-    setLoading(true)
+  const load = async () => {
     try {
-      const data = await getProperties()
-      setProperties(data)
-      setFiltered(data)
+      setLoading(true);
+      const data = await getProperties();
+      setProperties(data);
+      setFiltered(data);
     } catch (error) {
-      console.error("Error loading properties:", error)
+      console.error(
+        "Failed to load properties:",
+        error instanceof Error ? error.message : error
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  load();
+}, []);
+
 
   const handleSearch = () => {
     let results = properties.filter(
@@ -103,31 +107,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar with Switch Role */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-xl font-bold text-[#006D77]">
-              <Image
-                src="/logos/wrent1.png"
-                alt="Wrent Logo"
-                width={55}
-                height={55}
-                className="object-contain"
-              />
-            </Link>
-          </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem("userRole");
-              window.location.href = "/select-user";
-            }}
-            className="text-sm text-gray-600 hover:text-[#006D77] font-medium transition-colors"
-          >
-            Switch Role
-          </button>
-        </div>
-      </div>
+      
 
       {/* Hero / Search */}
       <section className="relative bg-[#006D77] text-white py-16 px-6 overflow-hidden">

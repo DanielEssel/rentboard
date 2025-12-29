@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FaWhatsapp } from "react-icons/fa6";
 import {
   MapPin,
   Phone,
@@ -93,7 +94,13 @@ type Property = {
 };
 
 /* MESSAGE MODAL */
-function MessageOwnerModal({ open, onClose, ownerId, propertyId, ownerName }: any) {
+function MessageOwnerModal({
+  open,
+  onClose,
+  ownerId,
+  propertyId,
+  ownerName,
+}: any) {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
@@ -102,7 +109,7 @@ function MessageOwnerModal({ open, onClose, ownerId, propertyId, ownerName }: an
       toast.error("Please enter a message");
       return;
     }
-    
+
     setSending(true);
 
     try {
@@ -144,7 +151,9 @@ function MessageOwnerModal({ open, onClose, ownerId, propertyId, ownerName }: an
               <MessageSquare className="text-white w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Contact {ownerName || "Owner"}</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                Contact {ownerName || "Owner"}
+              </h2>
               <p className="text-sm text-gray-500">Send a direct message</p>
             </div>
           </div>
@@ -205,11 +214,19 @@ function MessageOwnerModal({ open, onClose, ownerId, propertyId, ownerName }: an
 /* IMAGE VIEWER COMPONENT */
 function ImageViewer({ images, currentIndex, onIndexChange }: any) {
   const nextImage = () => {
-    onIndexChange((images?.length || 0) > 0 ? (currentIndex + 1) % images!.length : 0);
+    onIndexChange(
+      (images?.length || 0) > 0 ? (currentIndex + 1) % images!.length : 0
+    );
   };
 
   const prevImage = () => {
-    onIndexChange((images?.length || 0) > 0 ? currentIndex === 0 ? images!.length - 1 : currentIndex - 1 : 0);
+    onIndexChange(
+      (images?.length || 0) > 0
+        ? currentIndex === 0
+          ? images!.length - 1
+          : currentIndex - 1
+        : 0
+    );
   };
 
   if (!images || images.length === 0) {
@@ -269,7 +286,9 @@ function ImageViewer({ images, currentIndex, onIndexChange }: any) {
           <button
             key={i}
             className={`h-2 rounded-full transition-all duration-200 ${
-              i === currentIndex ? "w-8 bg-white shadow-sm" : "w-2 bg-white/60 hover:bg-white/80"
+              i === currentIndex
+                ? "w-8 bg-white shadow-sm"
+                : "w-2 bg-white/60 hover:bg-white/80"
             }`}
             onClick={() => onIndexChange(i)}
             aria-label={`View image ${i + 1}`}
@@ -285,19 +304,23 @@ function ImageViewer({ images, currentIndex, onIndexChange }: any) {
               key={i}
               onClick={() => onIndexChange(i)}
               className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 transition-all duration-200 ${
-                i === currentIndex 
-                  ? "ring-4 ring-white shadow-xl scale-105" 
+                i === currentIndex
+                  ? "ring-4 ring-white shadow-xl scale-105"
                   : "opacity-70 hover:opacity-100 hover:scale-105"
               }`}
               aria-label={`View thumbnail ${i + 1}`}
             >
-              <img 
-                src={img} 
-                className="w-full h-full object-cover" 
-                alt={`Thumbnail ${i + 1}`} 
+              <img
+                src={img}
+                className="w-full h-full object-cover"
+                alt={`Thumbnail ${i + 1}`}
                 loading="lazy"
               />
-              <div className={`absolute inset-0 ${i === currentIndex ? "" : "bg-black/30"}`} />
+              <div
+                className={`absolute inset-0 ${
+                  i === currentIndex ? "" : "bg-black/30"
+                }`}
+              />
             </button>
           ))}
           {images.length > 5 && (
@@ -322,14 +345,16 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
             <BarChart3 className="w-5 h-5 text-teal-600" />
             Property Performance
           </h3>
-          
+
           <div className="space-y-4">
             <div className="p-4 bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-gray-600">Total Views</span>
                 <Eye className="w-4 h-4 text-teal-600" />
               </div>
-              <p className="text-3xl font-bold text-teal-700">{property.view_count || 0}</p>
+              <p className="text-3xl font-bold text-teal-700">
+                {property.view_count || 0}
+              </p>
               <p className="text-xs text-gray-500 mt-1">Last 30 days</p>
             </div>
 
@@ -338,7 +363,9 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
                 <span className="text-sm text-gray-600">Favorites</span>
                 <Heart className="w-4 h-4 text-purple-600" />
               </div>
-              <p className="text-3xl font-bold text-purple-700">{property.favorite_count || 0}</p>
+              <p className="text-3xl font-bold text-purple-700">
+                {property.favorite_count || 0}
+              </p>
               <p className="text-xs text-gray-500 mt-1">Total saves</p>
             </div>
 
@@ -347,7 +374,9 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
                 <span className="text-sm text-gray-600">Messages</span>
                 <MessageSquare className="w-4 h-4 text-blue-600" />
               </div>
-              <p className="text-3xl font-bold text-blue-700">{property.message_count || 0}</p>
+              <p className="text-3xl font-bold text-blue-700">
+                {property.message_count || 0}
+              </p>
               <p className="text-xs text-gray-500 mt-1">Inquiries received</p>
             </div>
           </div>
@@ -355,13 +384,17 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
 
         {/* Quick Actions */}
         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
-          
+          <h3 className="text-lg font-bold text-gray-900 mb-4">
+            Quick Actions
+          </h3>
+
           <div className="space-y-3">
             <Button
               variant="outline"
               className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
-              onClick={() => window.location.href = `/dashboard/edit/${property.id}`}
+              onClick={() =>
+                (window.location.href = `/dashboard/edit/${property.id}`)
+              }
             >
               <div className="w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center">
                 <Pencil className="w-4 h-4 text-teal-600" />
@@ -372,7 +405,7 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
             <Button
               variant="outline"
               className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
-              onClick={() => window.open(`/property/${property.id}`, '_blank')}
+              onClick={() => window.open(`/property/${property.id}`, "_blank")}
             >
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                 <ExternalLink className="w-4 h-4 text-blue-600" />
@@ -384,7 +417,9 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
               variant="outline"
               className="w-full justify-start gap-3 border-gray-300 hover:bg-gray-50"
               onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/property/${property.id}`
+                );
                 toast.success("Link copied to clipboard");
               }}
             >
@@ -404,8 +439,8 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
       <div className="text-center mb-6 pb-6 border-b border-gray-100">
         <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
           {property.listedBy?.avatar_url ? (
-            <img 
-              src={property.listedBy.avatar_url} 
+            <img
+              src={property.listedBy.avatar_url}
               alt={property.listedBy.full_name || "Owner"}
               className="w-full h-full rounded-full object-cover"
             />
@@ -414,7 +449,9 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
           )}
         </div>
         <h3 className="text-xl font-bold text-gray-900 mb-1">Property Owner</h3>
-        <p className="text-lg font-semibold text-gray-700">{property.listedBy?.full_name || "Owner"}</p>
+        <p className="text-lg font-semibold text-gray-700">
+          {property.listedBy?.full_name || "Owner"}
+        </p>
         {property.listedBy?.created_at && (
           <p className="text-sm text-gray-500 mt-1 flex items-center justify-center gap-1">
             <ShieldCheck className="w-3 h-3" />
@@ -433,17 +470,22 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm group-hover:shadow transition-shadow">
                 <Phone className="text-teal-600 w-5 h-5" />
               </div>
-              <span className="font-medium text-gray-900">{property.listedBy.phone}</span>
+              <span className="font-medium text-gray-900">
+                {property.listedBy.phone}
+              </span>
             </a>
 
             <a
               className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-all duration-200 group hover:shadow-sm"
-              href={`https://wa.me/${property.listedBy.phone.replace(/\D/g, '')}`}
+              href={`https://wa.me/${property.listedBy.phone.replace(
+                /\D/g,
+                ""
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm group-hover:shadow transition-shadow">
-                <Whatsapp className="text-green-600 w-5 h-5" />
+                <FaWhatsapp className="text-green-600 w-5 h-5" />
               </div>
               <span className="font-medium text-gray-900">WhatsApp</span>
             </a>
@@ -458,7 +500,9 @@ function ContactCard({ property, mode, onMessageClick, onVisitClick }: any) {
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm group-hover:shadow transition-shadow">
               <Mail className="text-blue-600 w-5 h-5" />
             </div>
-            <span className="font-medium text-gray-900 truncate">{property.listedBy.email}</span>
+            <span className="font-medium text-gray-900 truncate">
+              {property.listedBy.email}
+            </span>
           </a>
         )}
       </div>
@@ -510,7 +554,9 @@ export default function PropertyDetail({
   const toPublicUrl = (path: string) => {
     if (!path) return "/placeholder-property.jpg";
     if (path.startsWith("http")) return path;
-    const publicUrl = supabase.storage.from("property-images").getPublicUrl(path).data.publicUrl;
+    const publicUrl = supabase.storage
+      .from("property-images")
+      .getPublicUrl(path).data.publicUrl;
     return publicUrl || "/placeholder-property.jpg";
   };
 
@@ -543,7 +589,7 @@ export default function PropertyDetail({
 
       const imageUrls = (imgs ?? [])
         .map((i) => toPublicUrl(i.image_url))
-        .filter(url => url && url !== "/placeholder-property.jpg");
+        .filter((url) => url && url !== "/placeholder-property.jpg");
 
       // Ensure we have at least one image
       if (imageUrls.length === 0) {
@@ -590,7 +636,7 @@ export default function PropertyDetail({
         await navigator.share(shareData);
         toast.success("Shared successfully!");
       } catch (err) {
-        if (err instanceof Error && err.name !== 'AbortError') {
+        if (err instanceof Error && err.name !== "AbortError") {
           console.error("Share failed:", err);
         }
       }
@@ -602,7 +648,7 @@ export default function PropertyDetail({
 
   const handleFavorite = async () => {
     if (!property) return;
-    
+
     const { data: session } = await supabase.auth.getSession();
     if (!session.session) {
       toast.error("Please login to save favorites");
@@ -610,7 +656,9 @@ export default function PropertyDetail({
     }
 
     setIsFavorited(!isFavorited);
-    toast.success(isFavorited ? "Removed from favorites" : "Added to favorites");
+    toast.success(
+      isFavorited ? "Removed from favorites" : "Added to favorites"
+    );
   };
 
   /* LOADING STATE */
@@ -623,8 +671,12 @@ export default function PropertyDetail({
             <div className="absolute top-0 left-0 w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
           <div className="space-y-2">
-            <p className="font-semibold text-gray-900">Loading property details</p>
-            <p className="text-sm text-gray-500">This will just take a moment</p>
+            <p className="font-semibold text-gray-900">
+              Loading property details
+            </p>
+            <p className="text-sm text-gray-500">
+              This will just take a moment
+            </p>
           </div>
         </div>
       </div>
@@ -639,9 +691,12 @@ export default function PropertyDetail({
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
-          <p className="font-bold text-xl text-gray-900 mb-2">Property Not Found</p>
+          <p className="font-bold text-xl text-gray-900 mb-2">
+            Property Not Found
+          </p>
           <p className="text-gray-500 text-sm mb-6">
-            {error || "The property you're looking for doesn't exist or has been removed."}
+            {error ||
+              "The property you're looking for doesn't exist or has been removed."}
           </p>
           <Button
             onClick={() => router.back()}
@@ -657,7 +712,11 @@ export default function PropertyDetail({
   const showPublicUI = mode === "public";
 
   return (
-    <div className={`min-h-screen ${showPublicUI ? 'bg-gray-50' : 'bg-transparent'}`}>
+    <div
+      className={`min-h-screen ${
+        showPublicUI ? "bg-gray-50" : "bg-transparent"
+      }`}
+    >
       {showPublicUI && (
         <div className="sticky top-0 bg-white/95 backdrop-blur-md z-30 border-b border-gray-200">
           <PageHeaders />
@@ -665,10 +724,10 @@ export default function PropertyDetail({
       )}
 
       {/* IMAGE VIEWER */}
-      <ImageViewer 
-        images={property.images} 
-        currentIndex={currentImageIndex} 
-        onIndexChange={setCurrentImageIndex} 
+      <ImageViewer
+        images={property.images}
+        currentIndex={currentImageIndex}
+        onIndexChange={setCurrentImageIndex}
       />
 
       {/* ACTION BAR */}
@@ -676,11 +735,15 @@ export default function PropertyDetail({
         <button
           className="bg-white/95 backdrop-blur-sm p-2.5 rounded-xl shadow-lg hover:bg-white transition-all duration-200 hover:scale-105 active:scale-95"
           onClick={handleFavorite}
-          aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+          aria-label={
+            isFavorited ? "Remove from favorites" : "Add to favorites"
+          }
         >
-          <Heart className={`h-5 w-5 transition-all duration-200 ${
-            isFavorited ? "text-red-500 fill-red-500" : "text-gray-700"
-          }`} />
+          <Heart
+            className={`h-5 w-5 transition-all duration-200 ${
+              isFavorited ? "text-red-500 fill-red-500" : "text-gray-700"
+            }`}
+          />
         </button>
 
         <button
@@ -693,43 +756,51 @@ export default function PropertyDetail({
       </div>
 
       {/* MAIN CONTENT */}
-      <div className={`max-w-7xl mx-auto ${showPublicUI ? 'px-4 sm:px-6 lg:px-8 py-8 sm:py-12' : ''}`}>
+      <div
+        className={`max-w-7xl mx-auto ${
+          showPublicUI ? "px-4 sm:px-6 lg:px-8 py-8 sm:py-12" : ""
+        }`}
+      >
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
-          
           {/* LEFT COLUMN */}
           <div className="space-y-6">
-            
             {/* HEADER CARD */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      property.available 
-                        ? "bg-green-100 text-green-700 border border-green-200" 
-                        : "bg-gray-100 text-gray-600 border border-gray-200"
-                    }`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        property.available
+                          ? "bg-green-100 text-green-700 border border-green-200"
+                          : "bg-gray-100 text-gray-600 border border-gray-200"
+                      }`}
+                    >
                       {property.available ? "Available" : "Unavailable"}
                     </span>
                     <span className="text-sm text-gray-500">
                       {property.property_type}
                     </span>
                   </div>
-                  
+
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 leading-tight">
                     {property.title}
                   </h1>
-                  
+
                   <div className="flex flex-wrap items-center gap-3 text-gray-600">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-5 w-5 text-teal-600 flex-shrink-0" />
-                      <span className="font-medium">{property.town}, {property.region}</span>
+                      <span className="font-medium">
+                        {property.town}, {property.region}
+                      </span>
                     </div>
-                    
+
                     {property.landmark && (
                       <span className="text-sm text-gray-500 flex items-center gap-1">
                         <span className="hidden sm:inline">•</span>
-                        <span className="truncate">Near {property.landmark}</span>
+                        <span className="truncate">
+                          Near {property.landmark}
+                        </span>
                       </span>
                     )}
                   </div>
@@ -742,7 +813,9 @@ export default function PropertyDetail({
                       <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
                         ₵{property.price.toLocaleString()}
                       </span>
-                      <span className="text-lg text-gray-500 font-medium">/ {property.payment_frequency}</span>
+                      <span className="text-lg text-gray-500 font-medium">
+                        / {property.payment_frequency}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -753,7 +826,9 @@ export default function PropertyDetail({
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button
                       className="flex-1 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700"
-                      onClick={() => router.push(`/dashboard/edit/${property.id}`)}
+                      onClick={() =>
+                        router.push(`/dashboard/edit/${property.id}`)
+                      }
                     >
                       <Pencil className="w-4 h-4 mr-2" />
                       Edit Property Details
@@ -761,7 +836,9 @@ export default function PropertyDetail({
                     <Button
                       variant="outline"
                       className="flex-1 border-gray-300 hover:bg-gray-50"
-                      onClick={() => window.open(`/property/${property.id}`, '_blank')}
+                      onClick={() =>
+                        window.open(`/property/${property.id}`, "_blank")
+                      }
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Public Page
@@ -777,15 +854,21 @@ export default function PropertyDetail({
                 <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-3">
                   <Home className="h-6 w-6 text-teal-600" />
                 </div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Property Type</p>
-                <p className="font-bold text-gray-900">{property.property_type}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  Property Type
+                </p>
+                <p className="font-bold text-gray-900">
+                  {property.property_type}
+                </p>
               </div>
 
               <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
                   <Calendar className="h-6 w-6 text-blue-600" />
                 </div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Listed</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  Listed
+                </p>
                 <p className="font-bold text-gray-900">
                   {new Date(property.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
@@ -799,8 +882,12 @@ export default function PropertyDetail({
                 <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-3">
                   <Star className="h-6 w-6 text-purple-600" />
                 </div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Status</p>
-                <p className="font-bold text-gray-900">{property.available ? "Available" : "Unavailable"}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  Status
+                </p>
+                <p className="font-bold text-gray-900">
+                  {property.available ? "Available" : "Unavailable"}
+                </p>
               </div>
             </div>
 
@@ -827,14 +914,16 @@ export default function PropertyDetail({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {property.amenities.map((amenity, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="flex items-center gap-3 p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-100 hover:border-teal-200 transition-all duration-200"
                     >
                       <div className="w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <CheckCircle2 className="text-teal-600 h-5 w-5" />
                       </div>
-                      <span className="font-medium text-gray-900">{amenity}</span>
+                      <span className="font-medium text-gray-900">
+                        {amenity}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -845,7 +934,7 @@ export default function PropertyDetail({
           {/* RIGHT COLUMN - CONTACT CARD */}
           <div className="hidden lg:block relative">
             <div className="sticky top-28">
-              <ContactCard 
+              <ContactCard
                 property={property}
                 mode={mode}
                 onMessageClick={() => setIsMessageOpen(true)}
@@ -863,7 +952,11 @@ export default function PropertyDetail({
           <button
             onClick={() => setShowMobileContact(!showMobileContact)}
             className="lg:hidden fixed bottom-6 right-6 z-40 bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 active:scale-95"
-            aria-label={showMobileContact ? "Hide contact options" : "Show contact options"}
+            aria-label={
+              showMobileContact
+                ? "Hide contact options"
+                : "Show contact options"
+            }
           >
             {showMobileContact ? (
               <X className="w-6 h-6" />
@@ -873,18 +966,20 @@ export default function PropertyDetail({
           </button>
 
           {/* Contact Panel */}
-          <div className={`
+          <div
+            className={`
             lg:hidden fixed inset-x-0 bottom-0 bg-white border-t-2 border-gray-200 shadow-2xl z-30 
             transform transition-transform duration-300 ease-in-out
-            ${showMobileContact ? 'translate-y-0' : 'translate-y-full'}
-          `}>
+            ${showMobileContact ? "translate-y-0" : "translate-y-full"}
+          `}
+          >
             <div className="px-4 py-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center shadow-md">
                     {property.listedBy?.avatar_url ? (
-                      <img 
-                        src={property.listedBy.avatar_url} 
+                      <img
+                        src={property.listedBy.avatar_url}
                         alt={property.listedBy.full_name || "Owner"}
                         className="w-full h-full rounded-full object-cover"
                       />
@@ -894,7 +989,9 @@ export default function PropertyDetail({
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Contact Owner</p>
-                    <p className="font-bold text-gray-900">{property.listedBy?.full_name || "Owner"}</p>
+                    <p className="font-bold text-gray-900">
+                      {property.listedBy?.full_name || "Owner"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -911,12 +1008,15 @@ export default function PropertyDetail({
                     </a>
 
                     <a
-                      href={`https://wa.me/${property.listedBy.phone.replace(/\D/g, '')}`}
+                      href={`https://wa.me/${property.listedBy.phone.replace(
+                        /\D/g,
+                        ""
+                      )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold shadow-lg transition-all duration-200 active:scale-95"
                     >
-                      <Whatsapp className="w-4 h-4" />
+                      <FaWhatsapp className="w-4 h-4" />
                       WhatsApp
                     </a>
                   </>

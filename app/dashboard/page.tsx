@@ -51,27 +51,6 @@ export default function DashboardPage() {
 
   const fetchProperties = async () => {
     setLoading(true);
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      setProperties([]);
-      setLoading(false);
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("properties")
-      .select("*, property_images(image_url)")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (!error && data) {
-      setProperties(data as Property[]);
-    }
-
     setLoading(false);
   };
 

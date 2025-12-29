@@ -18,7 +18,7 @@ export default function Footer() {
         {/* Social Media */}
         <div className="flex gap-4">
           <Link 
-            href="https://facebook.com" 
+            href="https://web.facebook.com/profile.php?id=61585492454084&sk=about_places" 
             target="_blank" 
             className="hover:text-[#FFD166] transition-colors"
             aria-label="Facebook"
@@ -28,7 +28,7 @@ export default function Footer() {
             </svg>
           </Link>
           <Link 
-            href="https://twitter.com" 
+            href="https://x.com/TownWrent" 
             target="_blank" 
             className="hover:text-[#FFD166] transition-colors"
             aria-label="Twitter"
@@ -38,7 +38,7 @@ export default function Footer() {
             </svg>
           </Link>
           <Link 
-            href="https://instagram.com" 
+            href="https://www.instagram.com/townwrent2025/" 
             target="_blank" 
             className="hover:text-[#FFD166] transition-colors"
             aria-label="Instagram"

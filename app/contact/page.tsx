@@ -80,7 +80,7 @@ export default function ContactPage() {
             <h3 className="text-lg font-semibold text-gray-800 mb-3">Follow Us</h3>
             <div className="flex gap-4">
               <a 
-                href="https://facebook.com" 
+                href="https://web.facebook.com/profile.php?id=61585492454084&sk=about_places" 
                 target="_blank" 
                 className="text-gray-600 hover:text-[#006D77] transition-colors"
                 aria-label="Facebook"
@@ -90,7 +90,7 @@ export default function ContactPage() {
                 </svg>
               </a>
               <a 
-                href="https://twitter.com" 
+                href="https://x.com/TownWrent" 
                 target="_blank" 
                 className="text-gray-600 hover:text-[#006D77] transition-colors"
                 aria-label="Twitter"
@@ -100,7 +100,7 @@ export default function ContactPage() {
                 </svg>
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/townwrent2025/" 
                 target="_blank" 
                 className="text-gray-600 hover:text-[#006D77] transition-colors"
                 aria-label="Instagram"

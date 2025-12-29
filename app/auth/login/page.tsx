@@ -174,7 +174,7 @@ function LoginForm() {
                     Password
                   </label>
                   <Link
-                    href="/forgot-password"
+                    href="/auth/forgot"
                     className="text-sm text-[#006D77] hover:text-[#005662] font-medium"
                   >
                     Forgot?

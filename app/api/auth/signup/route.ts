@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   const { email, password, full_name } = data;
 
-  const { data: authData, error } = await supabase.auth.signUp({
+  const { data: authData, error } = await (await supabase).auth.signUp({
     email,
     password,
     options: {

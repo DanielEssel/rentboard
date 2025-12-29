@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const body = await req.json();
 
   const { email, password } = body;

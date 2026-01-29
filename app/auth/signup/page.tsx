@@ -79,33 +79,33 @@ function SignupForm() {
     }))
   }
 
-  const handleGoogleSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
-        }
-      })
-      if (error) throw error
-    } catch (error: any) {
-      setError(error.message || "Failed to sign up with Google.")
-    }
-  }
+  // const handleGoogleSignUp = async () => {
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: 'google',
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
+  //       }
+  //     })
+  //     if (error) throw error
+  //   } catch (error: any) {
+  //     setError(error.message || "Failed to sign up with Google.")
+  //   }
+  // }
 
-  const handleFacebookSignUp = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
-        }
-      })
-      if (error) throw error
-    } catch (error: any) {
-      setError(error.message || "Failed to sign up with Facebook.")
-    }
-  }
+  // const handleFacebookSignUp = async () => {
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: 'facebook',
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback?returnTo=${returnTo}`
+  //       }
+  //     })
+  //     if (error) throw error
+  //   } catch (error: any) {
+  //     setError(error.message || "Failed to sign up with Facebook.")
+  //   }
+  // }
 
   // Password strength checker
   const getPasswordStrength = (password: string) => {
@@ -351,12 +351,12 @@ function SignupForm() {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Or sign up with</span>
+                <span className="px-4 bg-white text-gray-500"></span>
               </div>
             </div>
 
             {/* Social Signup */}
-            <div className="grid grid-cols-2 gap-3">
+            {/* <div className="grid grid-cols-2 gap-3">
               <button 
                 onClick={handleGoogleSignUp}
                 disabled={loading}
@@ -380,7 +380,7 @@ function SignupForm() {
                 </svg>
                 <span className="text-sm font-medium text-gray-700">Facebook</span>
               </button>
-            </div>
+            </div> */}
 
             {/* Login Link */}
             <p className="text-sm text-gray-600 text-center mt-6">

@@ -28,11 +28,10 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-[80vh] sm:min-h-[85vh] flex items-center justify-center overflow-hidden text-white">
-      
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/images/mock2.jpg"
+          src="/images/Mock2.jpg"
           alt="TownRent housing background"
           fill
           priority
@@ -84,35 +83,56 @@ export default function HeroSection() {
           </form>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
             <Link
               href="/explore"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-[#FFD166] text-[#006D77] font-bold 
-                         rounded-xl hover:bg-[#ffc940] hover:scale-105 transition-all 
-                         flex items-center justify-center gap-2"
+              className="
+      px-3 py-2 text-sm
+      sm:px-6 sm:py-4 sm:text-base
+      bg-[#FFD166] text-[#006D77]
+      font-semibold
+      rounded-md sm:rounded-xl
+      transition-all
+      flex items-center justify-center gap-1.5 sm:gap-2
+      hover:bg-[#ffc940] sm:hover:scale-105
+    "
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               Browse Properties
             </Link>
 
             <Link
               href="/request"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-md text-white 
-                         font-bold rounded-xl border-2 border-white/30
-                         hover:bg-white/20 hover:scale-105 transition-all
-                         flex items-center justify-center gap-2"
+              className="
+      px-3 py-2 text-sm
+      sm:px-6 sm:py-4 sm:text-base
+      bg-white/10 backdrop-blur-md text-white
+      font-semibold
+      rounded-md sm:rounded-xl
+      border border-white/30
+      transition-all
+      flex items-center justify-center gap-1.5 sm:gap-2
+      hover:bg-white/20 sm:hover:scale-105
+    "
             >
-              <House className="h-5 w-5" />
+              <House className="h-4 w-4 sm:h-5 sm:w-5" />
               Request a Room
             </Link>
 
             <Link
               href="/list-property"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-[#FFD166] text-[#006D77] font-bold 
-                         rounded-xl hover:bg-[#ffc940] hover:scale-105 transition-all 
-                         flex items-center justify-center gap-2"
+              className="
+      px-3 py-2 text-sm
+      sm:px-6 sm:py-4 sm:text-base
+      bg-[#FFD166] text-[#006D77]
+      font-semibold
+      rounded-md sm:rounded-xl
+      transition-all
+      flex items-center justify-center gap-1.5 sm:gap-2
+      hover:bg-[#ffc940] sm:hover:scale-105
+    "
             >
-              <House className="h-5 w-5" />
+              <House className="h-4 w-4 sm:h-5 sm:w-5" />
               Post a Property
             </Link>
           </div>

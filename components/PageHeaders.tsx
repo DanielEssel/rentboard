@@ -17,15 +17,19 @@ export default function Navbar() {
 
   useEffect(() => {
     const loadUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
     };
 
     loadUser();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user || null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_e, session) => {
+        setUser(session?.user || null);
+      }
+    );
 
     return () => listener.subscription.unsubscribe();
   }, []);
@@ -39,21 +43,21 @@ export default function Navbar() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setMobileMenuOpen(false);
-    router.push('/explore');
+    router.push("/explore");
   };
 
   return (
     <>
-      <nav 
+      <nav
         className={`sticky top-0 z-50 bg-white/95 backdrop-blur-xl 
         border-b transition-all duration-300 
-        ${scrolled ? "shadow-lg border-gray-200" : "shadow-sm border-gray-100"}`}
+        ${
+          scrolled ? "shadow-lg border-gray-200" : "shadow-sm border-gray-100"
+        }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          
           {/* NAVBAR ROW */}
           <div className="relative flex items-center justify-between h-16 sm:h-20">
-
             {/* MOBILE: HAMBURGER */}
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -64,8 +68,8 @@ export default function Navbar() {
             </button>
 
             {/* DESKTOP: BACK BUTTON */}
-            <Link 
-              href="/explore" 
+            <Link
+              href="/explore"
               className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-[#006D77] 
               hover:bg-teal-50 transition font-medium group"
             >
@@ -75,8 +79,8 @@ export default function Navbar() {
 
             {/* CENTER LOGO — Perfectly CENTERED */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 className="flex items-center justify-center hover:opacity-80 transition"
               >
                 <Image
@@ -112,8 +116,10 @@ export default function Navbar() {
               ) : (
                 <div className="flex items-center gap-4">
                   {/* User Card */}
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-full border 
-                  bg-gray-50 hover:border-[#006D77] hover:bg-teal-50 transition">
+                  <div
+                    className="flex items-center gap-2 px-4 py-2 rounded-full border 
+                  bg-gray-50 hover:border-[#006D77] hover:bg-teal-50 transition"
+                  >
                     <Avatar className="h-8 w-8 ring-2 ring-white">
                       <AvatarImage src="/user.png" />
                       <AvatarFallback className="bg-[#006D77] text-white text-xs">
@@ -151,18 +157,21 @@ export default function Navbar() {
             {/* Backdrop */}
             <motion.div
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
             />
 
             {/* Slide Panel */}
             <motion.div
               className="fixed left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl z-50 overflow-y-auto"
-              initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 200, damping: 25 }}
             >
               <div className="p-6">
-                
                 {/* MOBILE HEADER */}
                 <div className="flex items-center justify-between mb-8">
                   <Image
@@ -181,7 +190,6 @@ export default function Navbar() {
 
                 {/* NAV ITEMS */}
                 <div className="space-y-4">
-
                   <Link
                     href="/explore"
                     onClick={() => setMobileMenuOpen(false)}
@@ -205,8 +213,12 @@ export default function Navbar() {
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-semibold">{user.email?.split("@")[0]}</p>
-                            <p className="text-xs text-gray-600">{user.email}</p>
+                            <p className="font-semibold">
+                              {user.email?.split("@")[0]}
+                            </p>
+                            <p className="text-xs text-gray-600">
+                              {user.email}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -249,9 +261,7 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
-
                 </div>
-
               </div>
             </motion.div>
           </>

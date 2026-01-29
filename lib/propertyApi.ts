@@ -2,6 +2,7 @@ import { supabase } from './supabase/client';
 
 // TYPES
 export type Property = {
+  listedBy: any;
   id: string;
   user_id: string;
   title: string;

@@ -1,10 +1,39 @@
-// /lib/supabase/client.ts
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+export function createSupabaseBrowserClient() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          const cookies = document.cookie.split(';')
+          const cookie = cookies.find(c => c.trim().startsWith(`${name}=`))
+          return cookie?.split('=')[1]
+        },
+        set(name: string, value: string, options: any) {
+          let cookieString = `${name}=${value}; path=/;`
+          
+          if (options?.maxAge) {
+            cookieString += ` max-age=${options.maxAge};`
+          }
+          
+          // Important for cross-domain auth
+          if (options?.sameSite) {
+            cookieString += ` SameSite=${options.sameSite};`
+          }
+          
+          document.cookie = cookieString
+        },
+        remove(name: string, options: any) {
+          document.cookie = `${name}=; path=/; max-age=0;`
+        },
+      },
+    }
+  )
+}
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createSupabaseBrowserClient()
 
 // Types
 export type Property = {

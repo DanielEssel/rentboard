@@ -1,9 +1,9 @@
 // /app/api/auth/sign-in/route.ts
 import { NextResponse } from "next/server";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
-  const supabase = await createServerSupabase();
+  const supabase = await createSupabaseServerClient();
   const body = await req.json();
 
   const { email, password } = body;

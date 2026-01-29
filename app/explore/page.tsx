@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { MapPin, Search, BedDouble, BadgeCheck, SlidersHorizontal, X, ChevronDown, Grid3x3, List, TrendingUp, Heart, MessageSquare } from "lucide-react"
 import Footer from "@/components/Footer"
 import Link from "next/link"
-import Image from "next/image"
 import { getProperties, Property } from "@/lib/propertyApi"
 import PropertyCard from "@/components/PropertyCard"
 import { supabase } from "@/lib/supabase/client"
@@ -127,7 +126,7 @@ export default function ExplorePage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50/30">
 
       {/* Enhanced Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#006D77] via-[#005662] to-[#004d56] text-white py-12 md:py-24 px-4 sm:px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#006D77] via-[#005662] to-[#004d56] text-white py-12 md:py-6 px-4 sm:px-6 overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -239,7 +238,7 @@ export default function ExplorePage() {
                 </button>
 
                 <Link
-                  href="/request-accommodation"
+                  href="/request"
                   className="bg-[#FFD166] text-[#006D77] hover:bg-[#ffc940] transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 shadow-lg hover:shadow-xl"
                 >
                   <MessageSquare className="w-4 h-4" />
@@ -482,7 +481,7 @@ export default function ExplorePage() {
                 Clear All Filters
               </button>
               <Link
-                href="/request-accommodation"
+                href="/request"
                 className="bg-[#006D77] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#005662] transition-all hover:shadow-lg inline-flex items-center gap-2"
               >
                 <MessageSquare className="w-5 h-5" />

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 
 interface Property {
@@ -20,6 +21,7 @@ interface Property {
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<Property[]>([]);
+  const router = useRouter();
 
   // Helper function to convert Supabase storage paths to public URLs
   const getPublicImageUrl = (imagePath: string | undefined | null): string => {
@@ -46,13 +48,50 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    fetchProperties();
-  }, []);
+  const init = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
 
-  const fetchProperties = async () => {
-    setLoading(true);
-    setLoading(false);
+    if (!user) {
+      router.replace("/auth/login");
+      return;
+    }
+
+    fetchProperties(user.id);
   };
+
+  init();
+}, []);
+
+
+
+  const fetchProperties = async (userId: string) => {
+  setLoading(true);
+
+  const { data, error } = await supabase
+    .from("properties")
+    .select(`
+      id,
+      title,
+      price,
+      payment_frequency,
+      region,
+      town,
+      views,
+      favorites,
+      property_images ( image_url )
+    `)
+    .eq("owner_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+  } else {
+    setProperties(data || []);
+  }
+
+  setLoading(false);
+};
+
 
   // --- Stats ---
   const totalViews = properties.reduce((sum, p) => sum + (p.views || 0), 0);

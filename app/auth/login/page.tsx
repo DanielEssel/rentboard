@@ -18,25 +18,30 @@ function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
- const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setLoading(true);
   setError("");
 
   try {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) throw error;
 
-    router.replace(`/auth/callback?returnTo=${returnTo}`);
+    console.log("✅ Login successful!");
+
+    // Use window.location for a full page navigation
+    // This ensures the server picks up the new cookies
+    window.location.href = returnTo === '/' ? '/dashboard' : returnTo;
+    
   } catch (error: any) {
     setError(error.message || "Failed to sign in.");
-  } finally {
     setLoading(false);
   }
+  // Don't set loading to false if successful - page is navigating
 };
 
 

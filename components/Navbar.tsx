@@ -107,7 +107,7 @@ export default function Navbar() {
         transition-all duration-300 border border-gray-100
         ${scrolled ? "shadow-2xl bg-white" : "shadow-lg"}`}
       >
-        <div className="flex items-center justify-between gap-3 sm:gap-4 py-2">
+        <div className="flex items-center justify-between gap-3 sm:gap-4">
           {/* Logo */}
           <Link href="/" className="inline-flex items-center shrink-0 hover:opacity-80 transition-opacity">
             <Image

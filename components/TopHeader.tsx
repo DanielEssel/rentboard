@@ -5,68 +5,83 @@ import { Phone, Mail, MapPin } from "lucide-react";
 
 export default function TopHeader() {
   return (
-    <div className="bg-gradient-to-r from-[#006D77] to-[#005662] text-white py-2 px-4 border-b border-white/10">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-wrap justify-between items-center gap-2 text-xs sm:text-sm">
-          {/* Left Side - Contact Info */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-            <a 
-              href="tel:+233245258015" 
-              className="flex items-center gap-1 hover:text-[#FFD166] transition-colors group"
+    <div className="bg-gradient-to-r from-[#006D77] to-[#005662] text-white border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="h-10 flex items-center justify-between text-[11px] sm:text-sm whitespace-nowrap">
+
+          {/* Left: Contact */}
+          <div className="flex items-center gap-3 sm:gap-5 min-w-0">
+            <a
+              href="tel:+233245258015"
+              className="flex items-center gap-1.5 hover:text-[#FFD166] transition"
+              aria-label="Call TownWrent"
             >
-              <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 group-hover:rotate-12 transition-transform" />
-              <span className="font-medium">+233 245 258 015</span>
-            </a>
-            
-            <span className="text-white/30 hidden xs:inline">|</span>
-            
-            <a 
-              href="mailto:info@townwrent.com" 
-              className="flex items-center gap-1 hover:text-[#FFD166] transition-colors group"
-            >
-              <Mail className="h-3 w-3 sm:h-3.5 sm:w-3.5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium hidden sm:inline">info@townwrent.com</span>
-              <span className="font-medium sm:hidden">Email</span>
+              <Phone className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline font-medium">
+                +233 245 258 015
+              </span>
             </a>
 
-            <span className="text-white/30 hidden md:inline">|</span>
+            <span className="text-white/30">|</span>
 
-            <div className="hidden md:flex items-center gap-1.5 text-gray-200">
-              <MapPin className="h-3.5 w-3.5" />
+            <a
+              href="mailto:info@townwrent.com"
+              className="flex items-center gap-1.5 hover:text-[#FFD166] transition"
+              aria-label="Email TownWrent"
+            >
+              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline font-medium">
+                info@townwrent.com
+              </span>
+            </a>
+
+            {/* Desktop hint */}
+            <div className="hidden lg:flex items-center gap-1.5 text-gray-200">
+              <MapPin className="w-3.5 h-3.5" />
               <span>Ghana</span>
             </div>
           </div>
 
-          {/* Right Side - Quick Links */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link 
-              href="/about" 
-              className="hover:text-[#FFD166] transition-colors font-medium"
+          {/* Right: Links */}
+          <nav className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar">
+            <Link
+              href="/about"
+              className="hover:text-[#FFD166] transition font-medium"
             >
-              About
+              <span className="sm:hidden">Info</span>
+              <span className="hidden sm:inline">About Us</span>
             </Link>
+
             <span className="text-white/30">|</span>
-            <Link 
-              href="/how-it-works" 
-              className="hover:text-[#FFD166] transition-colors font-medium whitespace-nowrap"
+
+            <Link
+              href="/how-it-works"
+              className="hover:text-[#FFD166] transition font-medium"
             >
-              How It Works
+              <span className="sm:hidden">How</span>
+              <span className="hidden sm:inline">How It Works</span>
             </Link>
+
             <span className="text-white/30">|</span>
-            <Link 
-              href="/contact" 
-              className="hover:text-[#FFD166] transition-colors font-medium"
+
+            <Link
+              href="/contact"
+              className="hover:text-[#FFD166] transition font-medium"
             >
-              Contact
+              <span className="sm:hidden">Contact</span>
+              <span className="hidden sm:inline">Contact</span>
             </Link>
-            <span className="text-white/30 hidden sm:inline">|</span>
-            <Link 
-              href="/faqs" 
-              className="hover:text-[#FFD166] transition-colors font-medium hidden sm:inline"
+
+            <span className="text-white/30">|</span>
+
+            <Link
+              href="/faqs"
+              className="hover:text-[#FFD166] transition font-medium"
             >
-              FAQs
+              <span className="sm:hidden">FAQs</span>
+              <span className="hidden sm:inline">FAQs</span>
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
     </div>

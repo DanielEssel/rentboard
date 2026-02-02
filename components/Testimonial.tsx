@@ -131,7 +131,7 @@ export default function TestimonialCarousel() {
 
                 <div>
                   <p className="font-bold text-xl">{currentTestimonial.name}</p>
-                  <p className="text-[#E0FBFC] text-sm">
+                  <p className="text-[#E0FBFC] text-sm sm:text-base">
                     {currentTestimonial.role} • {currentTestimonial.location}
                   </p>
                 </div>

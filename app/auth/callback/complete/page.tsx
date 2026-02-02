@@ -60,7 +60,7 @@ function CallbackContent() {
       <div className="text-center">
         <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#006D77] border-r-transparent" />
         <p className="text-lg font-medium text-gray-700">Completing sign in...</p>
-        <p className="text-sm text-gray-500 mt-2">Please wait a moment</p>
+        <p className="text-sm sm:text-base text-gray-500 mt-2">Please wait a moment</p>
       </div>
     </div>
   );

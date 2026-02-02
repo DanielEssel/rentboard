@@ -1,44 +1,61 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { MapPin, Search, BedDouble, BadgeCheck, SlidersHorizontal, X, ChevronDown, Grid3x3, List, TrendingUp, Heart, MessageSquare } from "lucide-react"
-import Footer from "@/components/Footer"
-import Link from "next/link"
-import { getProperties, Property } from "@/lib/propertyApi"
-import PropertyCard from "@/components/PropertyCard"
-import { supabase } from "@/lib/supabase/client"
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MapPin,
+  Search,
+  BedDouble,
+  BadgeCheck,
+  SlidersHorizontal,
+  X,
+  ChevronDown,
+  Grid3x3,
+  List,
+  TrendingUp,
+  Heart,
+  MessageSquare,
+} from "lucide-react";
+import Footer from "@/components/Footer";
+import Link from "next/link";
+import { getProperties, Property } from "@/lib/properties";
+import PropertyCard from "@/components/PropertyCard";
+import { supabase } from "@/lib/supabase/client";
 
 export default function ExplorePage() {
-  const [search, setSearch] = useState("")
-  const [properties, setProperties] = useState<Property[]>([])
-  const [filtered, setFiltered] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
-  const [showFilters, setShowFilters] = useState(false)
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  
+  const [search, setSearch] = useState("");
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [filtered, setFiltered] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
   // Filter states
-  const [priceRange, setPriceRange] = useState<string>("all")
-  const [propertyType, setPropertyType] = useState<string>("all")
-  const [verifiedOnly, setVerifiedOnly] = useState(false)
-  const [bedroomCount, setBedroomCount] = useState<string>("all")
-  const [sortBy, setSortBy] = useState<string>("newest")
+  const [priceRange, setPriceRange] = useState<string>("all");
+  const [propertyType, setPropertyType] = useState<string>("all");
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [bedroomCount, setBedroomCount] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("newest");
 
   // Helper function to get valid image URL
   const getValidImageUrl = (imageUrl: string | undefined | null): string => {
-    if (!imageUrl) return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
-    
+    if (!imageUrl)
+      return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+
     if (imageUrl.startsWith("http")) return imageUrl;
-    
+
     try {
       const publicUrl = supabase.storage
         .from("property-images")
         .getPublicUrl(imageUrl).data.publicUrl;
-      return publicUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+      return (
+        publicUrl ||
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+      );
     } catch {
       return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
     }
-  }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -50,7 +67,7 @@ export default function ExplorePage() {
       } catch (error) {
         console.error(
           "Failed to load properties:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
       } finally {
         setLoading(false);
@@ -65,66 +82,65 @@ export default function ExplorePage() {
       (p) =>
         p.title.toLowerCase().includes(search.toLowerCase()) ||
         p.region.toLowerCase().includes(search.toLowerCase()) ||
-        p.town.toLowerCase().includes(search.toLowerCase())
-    )
+        p.town.toLowerCase().includes(search.toLowerCase()),
+    );
 
     if (propertyType !== "all") {
-      results = results.filter((p) => p.property_type === propertyType)
+      results = results.filter((p) => p.property_type === propertyType);
     }
 
     if (priceRange !== "all") {
       results = results.filter((p) => {
-        const price = p.price
+        const price = p.price;
         switch (priceRange) {
           case "low":
-            return price < 500
+            return price < 500;
           case "medium":
-            return price >= 500 && price < 1000
+            return price >= 500 && price < 1000;
           case "high":
-            return price >= 1000
+            return price >= 1000;
           default:
-            return true
+            return true;
         }
-      })
+      });
     }
 
     if (verifiedOnly) {
-      results = results.filter((p) => (p as any).is_verified)
+      results = results.filter((p) => (p as any).is_verified);
     }
 
     // Sorting
     if (sortBy === "price-low") {
-      results.sort((a, b) => a.price - b.price)
+      results.sort((a, b) => a.price - b.price);
     } else if (sortBy === "price-high") {
-      results.sort((a, b) => b.price - a.price)
+      results.sort((a, b) => b.price - a.price);
     } else if (sortBy === "popular") {
-      results.sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+      results.sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
     }
 
-    setFiltered(results)
-  }
+    setFiltered(results);
+  };
 
   const clearFilters = () => {
-    setPriceRange("all")
-    setPropertyType("all")
-    setVerifiedOnly(false)
-    setBedroomCount("all")
-    setSearch("")
-    setSortBy("newest")
-    setFiltered(properties)
-  }
+    setPriceRange("all");
+    setPropertyType("all");
+    setVerifiedOnly(false);
+    setBedroomCount("all");
+    setSearch("");
+    setSortBy("newest");
+    setFiltered(properties);
+  };
 
   const activeFilterCount = [
     priceRange !== "all",
     propertyType !== "all",
     verifiedOnly,
     bedroomCount !== "all",
-    search !== ""
-  ].filter(Boolean).length
+    search !== "",
+  ].filter(Boolean).length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50/30">
-
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-[#006D77] via-[#005662] to-[#004d56] text-white py-12 md:py-6 px-4 sm:px-6 overflow-hidden">
         {/* Animated Background Elements */}
@@ -137,7 +153,7 @@ export default function ExplorePage() {
             transition={{
               duration: 20,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             className="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full blur-3xl"
           />
@@ -149,7 +165,7 @@ export default function ExplorePage() {
             transition={{
               duration: 15,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FFD166]/10 rounded-full blur-3xl"
           />
@@ -160,9 +176,11 @@ export default function ExplorePage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-teal-200 text-sm mb-6"
+            className="flex items-center gap-2 text-teal-200 text-sm sm:text-base mb-6"
           >
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
             <span>/</span>
             <span className="text-white font-medium">Explore Properties</span>
           </motion.div>
@@ -177,8 +195,9 @@ export default function ExplorePage() {
               Discover Your
               <span className="block text-[#FFD166]">Perfect Home</span>
             </h1>
-            <p className="text-teal-100 mb-6 md:mb-10 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
-              Browse verified properties across Ghana. Book site visits instantly.
+            <p className="text-teal-100 mb-6 md:mb-10 text-sm sm:text-base sm:text-base md:text-lg max-w-2xl mx-auto">
+              Browse verified properties across Ghana. Book site visits
+              instantly.
             </p>
 
             {/* Enhanced Search Bar */}
@@ -213,7 +232,7 @@ export default function ExplorePage() {
               <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-4 md:mt-6">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium flex items-center gap-2 border border-white/20"
+                  className="bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm sm:text-base font-medium flex items-center gap-2 border border-white/20"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
                   Filters
@@ -223,15 +242,17 @@ export default function ExplorePage() {
                     </span>
                   )}
                 </button>
-                
+
                 <button
                   onClick={() => {
                     setVerifiedOnly(!verifiedOnly);
                     setTimeout(handleSearch, 100);
                   }}
                   className={`${
-                    verifiedOnly ? "bg-[#FFD166] text-[#006D77]" : "bg-white/10 text-white border-white/20"
-                  } backdrop-blur-sm hover:bg-[#FFD166] hover:text-[#006D77] transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium flex items-center gap-2 border`}
+                    verifiedOnly
+                      ? "bg-[#FFD166] text-[#006D77]"
+                      : "bg-white/10 text-white border-white/20"
+                  } backdrop-blur-sm hover:bg-[#FFD166] hover:text-[#006D77] transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm sm:text-base font-medium flex items-center gap-2 border`}
                 >
                   <BadgeCheck className="w-4 h-4" />
                   Verified
@@ -239,7 +260,7 @@ export default function ExplorePage() {
 
                 <Link
                   href="/request"
-                  className="bg-[#FFD166] text-[#006D77] hover:bg-[#ffc940] transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 shadow-lg hover:shadow-xl"
+                  className="bg-[#FFD166] text-[#006D77] hover:bg-[#ffc940] transition-all px-3 md:px-4 py-2 rounded-full text-xs md:text-sm sm:text-base font-bold flex items-center gap-2 shadow-lg hover:shadow-xl"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Request Property
@@ -268,7 +289,7 @@ export default function ExplorePage() {
                 </h3>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-[#006D77] hover:text-[#005662] font-medium flex items-center gap-1 hover:gap-2 transition-all"
+                  className="text-sm sm:text-base text-[#006D77] hover:text-[#005662] font-medium flex items-center gap-1 hover:gap-2 transition-all"
                 >
                   <X className="w-4 h-4" />
                   Clear All Filters
@@ -278,7 +299,7 @@ export default function ExplorePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Property Type */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">
                     Property Type
                   </label>
                   <div className="relative">
@@ -301,7 +322,7 @@ export default function ExplorePage() {
 
                 {/* Price Range */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">
                     Price Range
                   </label>
                   <div className="relative">
@@ -321,7 +342,7 @@ export default function ExplorePage() {
 
                 {/* Sort By */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">
                     Sort By
                   </label>
                   <div className="relative">
@@ -341,7 +362,7 @@ export default function ExplorePage() {
 
                 {/* Bedrooms */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">
                     Bedrooms
                   </label>
                   <div className="relative">
@@ -381,8 +402,10 @@ export default function ExplorePage() {
               Available Properties
             </h2>
             <p className="text-gray-600">
-              {filtered.length} {filtered.length === 1 ? 'property' : 'properties'} found
-              {activeFilterCount > 0 && ` with ${activeFilterCount} active filter${activeFilterCount > 1 ? 's' : ''}`}
+              {filtered.length}{" "}
+              {filtered.length === 1 ? "property" : "properties"} found
+              {activeFilterCount > 0 &&
+                ` with ${activeFilterCount} active filter${activeFilterCount > 1 ? "s" : ""}`}
             </p>
           </div>
 
@@ -419,20 +442,20 @@ export default function ExplorePage() {
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
               className="inline-block rounded-full h-16 w-16 border-4 border-[#006D77] border-t-transparent"
             />
-            <p className="mt-6 text-gray-600 font-medium">Discovering amazing properties...</p>
+            <p className="mt-6 text-gray-600 font-medium">
+              Discovering amazing properties...
+            </p>
           </div>
         ) : filtered.length > 0 ? (
           <motion.div
             layout
             className={`grid gap-6 ${
-              viewMode === "grid"
-                ? "grid-cols-2 lg:grid-cols-3"
-                : "grid-cols-1"
+              viewMode === "grid" ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
             }`}
           >
             {filtered.map((property, index) => {
               const imageUrl = getValidImageUrl(
-                (property as any).property_images?.[0]?.image_url
+                (property as any).property_images?.[0]?.image_url,
               );
 
               return (
@@ -443,17 +466,13 @@ export default function ExplorePage() {
                   transition={{ delay: index * 0.05 }}
                   layout
                 >
-                  <PropertyCard 
+                  <PropertyCard
                     property={{
-                      id: property.id,
-                      title: property.title,
-                      price: property.price,
+                      ...property, // all existing fields
+                      image: imageUrl, // optional extra field
                       location: `${property.town}, ${property.region}`,
-                      image: imageUrl,
-                      views: property.views ?? 0,
-                      favorites: property.favorites ?? 0,
-                      isFavorited: property.isFavorited ?? false
-                    }} 
+                      isFavorited: property.isFavorited ?? false,
+                    }}
                   />
                 </motion.div>
               );
@@ -468,9 +487,12 @@ export default function ExplorePage() {
             <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
               <BedDouble className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No properties found</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              No properties found
+            </h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              We couldn't find any properties matching your criteria. Try adjusting your filters or let us help you find what you need.
+              We couldn't find any properties matching your criteria. Try
+              adjusting your filters or let us help you find what you need.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -494,5 +516,5 @@ export default function ExplorePage() {
 
       <Footer />
     </div>
-  )
+  );
 }

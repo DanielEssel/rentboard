@@ -157,7 +157,7 @@ export default function AdvancedAnalytics() {
         <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#006D77] to-[#83C5BE] bg-clip-text text-transparent mb-2">
           Analytics Dashboard
         </h1>
-        <p className="text-gray-600 text-sm sm:text-base">
+        <p className="text-gray-600 text-sm sm:text-base sm:text-base">
           Track performance and engagement across your properties
         </p>
       </div>
@@ -312,11 +312,11 @@ export default function AdvancedAnalytics() {
                   className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-[#006D77] to-[#83C5BE] rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-[#006D77] to-[#83C5BE] rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
                       {index + 1}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-gray-900 text-sm truncate">
+                      <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                         {property.title}
                       </p>
                       <p className="text-xs text-gray-500">
@@ -328,13 +328,13 @@ export default function AdvancedAnalytics() {
                     <div className="text-right">
                       <div className="flex items-center gap-1 text-[#006D77]">
                         <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="font-bold text-sm sm:text-base">{property.views || 0}</span>
+                        <span className="font-bold text-sm sm:text-base sm:text-base">{property.views || 0}</span>
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="flex items-center gap-1 text-[#FFB703]">
                         <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="font-bold text-sm sm:text-base">{property.favorites || 0}</span>
+                        <span className="font-bold text-sm sm:text-base sm:text-base">{property.favorites || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -363,7 +363,7 @@ function StatCard({ icon, label, value, change, positive }: StatCardProps) {
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
-            <p className="text-gray-600 text-xs sm:text-sm mb-1 truncate">{label}</p>
+            <p className="text-gray-600 text-xs sm:text-sm sm:text-base mb-1 truncate">{label}</p>
             <p className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 truncate">{value}</p>
             <div className="flex items-center gap-1 text-xs">
               {positive ? (

@@ -107,7 +107,7 @@ export default function RequestAccommodationPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center gap-2 text-teal-200 text-sm mb-4"
+            className="flex items-center justify-center gap-2 text-teal-200 text-sm sm:text-base mb-4"
           >
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
@@ -127,7 +127,7 @@ export default function RequestAccommodationPage() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 leading-tight">
               Can't Find What You're Looking For?
             </h1>
-            <p className="text-teal-100 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
+            <p className="text-teal-100 text-sm sm:text-base sm:text-base md:text-lg max-w-2xl mx-auto">
               Tell us what you need, and we'll help you find the perfect accommodation that matches your requirements.
             </p>
           </motion.div>
@@ -147,7 +147,7 @@ export default function RequestAccommodationPage() {
               <CheckCircle className="w-6 h-6 flex-shrink-0" />
               <div>
                 <p className="font-semibold">Request Submitted Successfully!</p>
-                <p className="text-sm text-green-100">We'll contact you within 24 hours.</p>
+                <p className="text-sm sm:text-base text-green-100">We'll contact you within 24 hours.</p>
               </div>
             </div>
           </motion.div>
@@ -167,7 +167,7 @@ export default function RequestAccommodationPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
               Accommodation Request Form
             </h2>
-            <p className="text-teal-100 text-sm md:text-base">
+            <p className="text-teal-100 text-sm sm:text-base md:text-base">
               Fill in the details below and our team will find matching properties for you
             </p>
           </div>
@@ -183,7 +183,7 @@ export default function RequestAccommodationPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -208,7 +208,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Email */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -236,7 +236,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Phone */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -273,7 +273,7 @@ export default function RequestAccommodationPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Preferred Location */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Preferred Location <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -301,7 +301,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Property Type */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Property Type <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -332,7 +332,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Bedrooms */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Number of Bedrooms
                   </label>
                   <div className="relative">
@@ -354,7 +354,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Budget Range */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Minimum Budget (₵) <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -381,7 +381,7 @@ export default function RequestAccommodationPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Maximum Budget (₵)
                   </label>
                   <div className="relative">
@@ -399,7 +399,7 @@ export default function RequestAccommodationPage() {
 
                 {/* Move-in Date */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Preferred Move-in Date <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -487,7 +487,7 @@ export default function RequestAccommodationPage() {
               <CheckCircle className="w-6 h-6 text-[#006D77]" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Quick Response</h3>
-            <p className="text-sm text-gray-600">We'll contact you within 24 hours with matching properties</p>
+            <p className="text-sm sm:text-base text-gray-600">We'll contact you within 24 hours with matching properties</p>
           </motion.div>
 
           <motion.div
@@ -500,7 +500,7 @@ export default function RequestAccommodationPage() {
               <Home className="w-6 h-6 text-[#006D77]" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Verified Properties</h3>
-            <p className="text-sm text-gray-600">All recommended properties are verified and authentic</p>
+            <p className="text-sm sm:text-base text-gray-600">All recommended properties are verified and authentic</p>
           </motion.div>
 
           <motion.div
@@ -513,7 +513,7 @@ export default function RequestAccommodationPage() {
               <MessageSquare className="w-6 h-6 text-[#006D77]" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Personalized Help</h3>
-            <p className="text-sm text-gray-600">Our team will help you find exactly what you need</p>
+            <p className="text-sm sm:text-base text-gray-600">Our team will help you find exactly what you need</p>
           </motion.div>
         </div>
       </main>

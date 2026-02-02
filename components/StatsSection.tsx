@@ -115,7 +115,7 @@ export default function StatsSection() {
               <p className="font-semibold text-gray-800 mb-1">
                 {stat.label}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 {stat.description}
               </p>
             </div>

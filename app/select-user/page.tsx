@@ -47,7 +47,7 @@ export default function SelectUserPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-gray-600 text-sm sm:text-base"
+            className="text-gray-600 text-sm sm:text-base sm:text-base"
           >
             Choose your role below
           </motion.p>
@@ -125,7 +125,7 @@ export default function SelectUserPage() {
           transition={{ delay: 0.6 }}
           onClick={handleContinue}
           disabled={!role}
-          className={`w-full font-semibold py-3 rounded-xl transition-all text-sm sm:text-base ${
+          className={`w-full font-semibold py-3 rounded-xl transition-all text-sm sm:text-base sm:text-base ${
             role
               ? "bg-[#006D77] text-white hover:bg-[#005662] shadow-lg hover:shadow-xl"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"

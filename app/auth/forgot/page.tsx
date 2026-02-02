@@ -55,7 +55,7 @@ function ForgotPasswordForm() {
         className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white transition-all shadow-sm hover:shadow-md"
       >
         <ArrowLeft className="w-4 h-4 text-gray-600" />
-        <span className="text-sm font-medium text-gray-700">Back to Login</span>
+        <span className="text-sm sm:text-base font-medium text-gray-700">Back to Login</span>
       </Link>
 
       <motion.div
@@ -117,7 +117,7 @@ function ForgotPasswordForm() {
           >
             <Shield className="w-8 h-8 text-[#FFD166]" />
             <div>
-              <p className="text-sm text-teal-100">Secure & Safe</p>
+              <p className="text-sm sm:text-base text-teal-100">Secure & Safe</p>
               <p className="text-lg font-bold text-white">256-bit Encryption</p>
             </div>
           </motion.div>
@@ -148,7 +148,7 @@ function ForgotPasswordForm() {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm"
+                    className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm sm:text-base"
                   >
                     {error}
                   </motion.div>
@@ -157,7 +157,7 @@ function ForgotPasswordForm() {
                 <div className="space-y-6">
                   {/* Email Input */}
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                       Email Address
                     </label>
                     <div className="relative">
@@ -199,7 +199,7 @@ function ForgotPasswordForm() {
                   transition={{ delay: 0.3 }}
                   className="mt-6 p-4 bg-teal-50 rounded-xl border border-teal-100"
                 >
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     <span className="font-semibold text-[#006D77]">💡 Tip:</span> Check your spam folder if you don't see the email in your inbox within a few minutes.
                   </p>
                 </motion.div>
@@ -226,7 +226,7 @@ function ForgotPasswordForm() {
 
                 <div className="bg-teal-50 rounded-xl p-4 mb-6 text-left">
                   <h3 className="font-semibold text-[#006D77] mb-2">What's next?</h3>
-                  <ol className="text-sm text-gray-700 space-y-2">
+                  <ol className="text-sm sm:text-base text-gray-700 space-y-2">
                     <li className="flex items-start gap-2">
                       <span className="flex-shrink-0 w-5 h-5 bg-[#006D77] text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
                       <span>Check your email inbox (and spam folder)</span>
@@ -244,7 +244,7 @@ function ForgotPasswordForm() {
 
                 <button
                   onClick={() => setSuccess(false)}
-                  className="text-[#006D77] font-semibold hover:text-[#005662] hover:underline text-sm"
+                  className="text-[#006D77] font-semibold hover:text-[#005662] hover:underline text-sm sm:text-base"
                 >
                   Didn't receive the email? Try again
                 </button>
@@ -253,7 +253,7 @@ function ForgotPasswordForm() {
 
             {/* Back to Login */}
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Remember your password?{" "}
                 <Link
                   href="/auth/login"

@@ -5,6 +5,7 @@ export type Property = {
   listedBy: any;
   id: string;
   user_id: string;
+  
   title: string;
   property_type: string;
   price: number;

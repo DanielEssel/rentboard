@@ -110,22 +110,22 @@ export default function DashboardPage() {
       {/* Top Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="text-sm font-medium text-gray-500">Total Properties</h3>
+          <h3 className="text-sm sm:text-base font-medium text-gray-500">Total Properties</h3>
           <p className="text-2xl font-bold text-[#006D77]">{properties.length}</p>
         </div>
 
         <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="text-sm font-medium text-gray-500">Total Views</h3>
+          <h3 className="text-sm sm:text-base font-medium text-gray-500">Total Views</h3>
           <p className="text-2xl font-bold text-[#006D77]">{totalViews.toLocaleString()}</p>
         </div>
 
         <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="text-sm font-medium text-gray-500">Total Favorites</h3>
+          <h3 className="text-sm sm:text-base font-medium text-gray-500">Total Favorites</h3>
           <p className="text-2xl font-bold text-[#006D77]">{totalFavorites.toLocaleString()}</p>
         </div>
 
         <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="text-sm font-medium text-gray-500">Messages</h3>
+          <h3 className="text-sm sm:text-base font-medium text-gray-500">Messages</h3>
           <p className="text-2xl font-bold text-[#006D77]">19</p>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
 
                     <div className="p-4">
                       <h3 className="font-semibold text-lg truncate">{p.title}</h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm sm:text-base text-gray-500">
                         {p.town}, {p.region}
                       </p>
 

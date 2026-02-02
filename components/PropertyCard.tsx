@@ -3,16 +3,29 @@ import Link from "next/link"
 import { Heart } from "lucide-react"  // nice minimal icon (Next.js-friendly)
 
 type Property = {
-  id: string
-  title: string
-  price: number
-  location: string
-  image: string
-  views: number
-  favorites: number
-  isFavorited?: boolean
+listedBy: any;
+  id: string;
+  user_id: string;
+  title: string;
+  property_type: string;
+  price: number;
+  payment_frequency: "monthly" | "yearly" | "negotiable";
+  available: boolean;
+  region: string;
+  location: string;
+  image: string;
+  town: string;
+  landmark: string | null;
+  amenities: string[];
+  description: string;
+  created_at: string;
+  updated_at: string;
+  views?: number
+favorites?: number
+isFavorited?: boolean
   
 }
+
 
 interface Props {
   property: Property
@@ -21,6 +34,7 @@ interface Props {
 export default function PropertyCard({ property }: Props) {
   return (
     <div className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition relative">
+      
       {/* Property Image */}
       <Image
         src={property.image}
@@ -45,7 +59,7 @@ export default function PropertyCard({ property }: Props) {
       {/* Card Content */}
       <div className="p-4">
         <h3 className="font-semibold text-lg mb-1">{property.title}</h3>
-        <p className="text-sm text-gray-500 mb-2">{property.location}</p>
+        <p className="text-sm sm:text-base text-gray-500 mb-2">{property.location}</p>
         <p className="font-bold text-[#006D77] mb-3">
           GHS {property.price}/month
         </p>

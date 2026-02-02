@@ -126,7 +126,7 @@ export default function Navbar() {
                         {user.email?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-semibold text-[#006D77] max-w-[120px] truncate">
+                    <span className="text-sm sm:text-base font-semibold text-[#006D77] max-w-[120px] truncate">
                       {user.email?.split("@")[0]}
                     </span>
                   </div>

@@ -296,7 +296,7 @@ export default function SettingsPage() {
               <p className="text-gray-600 mb-2">{email}</p>
               
               {profile && (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm sm:text-base text-gray-500">
                   Member since {formatDate(profile.created_at)}
                 </p>
               )}
@@ -329,7 +329,7 @@ export default function SettingsPage() {
             <h3 className="text-lg font-semibold text-gray-900">Profile Information</h3>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                 Full Name *
               </label>
               <div className="relative">
@@ -347,7 +347,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -367,7 +367,7 @@ export default function SettingsPage() {
 
             {profile?.updated_at && (
               <div className="pt-4 border-t">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Last updated: {formatDate(profile.updated_at)}
                 </p>
               </div>

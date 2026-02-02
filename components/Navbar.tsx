@@ -135,7 +135,7 @@ export default function Navbar() {
                 className="w-full pl-12 pr-4 py-2.5 rounded-full border-2 border-gray-200 
                          focus:border-[#006D77] focus:outline-none focus:ring-2 
                          focus:ring-[#006D77]/20 transition-all bg-white/80 
-                         placeholder:text-gray-400 text-sm font-medium"
+                         placeholder:text-gray-400 text-sm sm:text-base font-medium"
               />
             </div>
           </form>
@@ -150,7 +150,7 @@ export default function Navbar() {
                   <button
                     key={item.href}
                     onClick={() => handleProtectedNav(item.href)}
-                    className={`px-3 lg:px-4 py-2 rounded-full font-medium transition-all cursor-pointer text-sm whitespace-nowrap ${
+                    className={`px-3 lg:px-4 py-2 rounded-full font-medium transition-all cursor-pointer text-sm sm:text-base whitespace-nowrap ${
                       isActive 
                         ? "bg-[#006D77] text-white shadow-md" 
                         : "text-gray-700 hover:bg-gray-100 hover:text-[#006D77]"
@@ -165,7 +165,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 lg:px-4 py-2 rounded-full font-medium transition-all text-sm whitespace-nowrap ${
+                  className={`px-3 lg:px-4 py-2 rounded-full font-medium transition-all text-sm sm:text-base whitespace-nowrap ${
                     isActive 
                       ? "bg-[#006D77] text-white shadow-md" 
                       : "text-gray-700 hover:bg-gray-100 hover:text-[#006D77]"
@@ -183,13 +183,13 @@ export default function Navbar() {
               <div className="flex rounded-full overflow-hidden shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
                 <Link
                   href="/auth/login"
-                  className="px-4 lg:px-5 py-2.5 bg-white text-[#006D77] font-semibold hover:bg-gray-50 transition-colors text-sm"
+                  className="px-4 lg:px-5 py-2.5 bg-white text-[#006D77] font-semibold hover:bg-gray-50 transition-colors text-sm sm:text-base"
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="px-4 lg:px-5 py-2.5 bg-gradient-to-r from-[#FFD166] to-[#ffc940] text-[#006D77] font-semibold hover:from-[#ffc940] hover:to-[#FFD166] transition-all text-sm"
+                  className="px-4 lg:px-5 py-2.5 bg-gradient-to-r from-[#FFD166] to-[#ffc940] text-[#006D77] font-semibold hover:from-[#ffc940] hover:to-[#FFD166] transition-all text-sm sm:text-base"
                 >
                   Sign Up
                 </Link>
@@ -203,11 +203,11 @@ export default function Navbar() {
                   <button className="flex items-center gap-2 px-3 lg:px-4 py-2 rounded-full border-2 border-gray-200 text-[#006D77] font-semibold hover:bg-teal-50 hover:border-[#006D77] transition-all cursor-pointer shadow-sm hover:shadow-md">
                     <Avatar className="h-7 w-7 ring-2 ring-white">
                       <AvatarImage src="/user.png" alt="User" />
-                      <AvatarFallback className="bg-[#006D77] text-white text-sm">
+                      <AvatarFallback className="bg-[#006D77] text-white text-sm sm:text-base">
                         {user.email?.charAt(0)?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="max-w-[100px] truncate text-sm hidden lg:inline">
+                    <span className="max-w-[100px] truncate text-sm sm:text-base hidden lg:inline">
                       {user.email?.split("@")[0]}
                     </span>
                     <ChevronDown className="h-4 w-4 opacity-60" />
@@ -220,7 +220,7 @@ export default function Navbar() {
                   className="w-56 rounded-2xl shadow-2xl bg-white border-gray-200 p-2"
                 >
                   <div className="px-3 py-2.5 mb-1">
-                    <p className="font-semibold text-gray-900 text-sm truncate">{user.email}</p>
+                    <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">{user.email}</p>
                     <p className="text-xs text-gray-500 mt-0.5">Manage your account</p>
                   </div>
 
@@ -229,7 +229,7 @@ export default function Navbar() {
                   <DropdownMenuItem asChild>
                     <Link 
                       href="/dashboard" 
-                      className="w-full cursor-pointer rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
+                      className="w-full cursor-pointer rounded-lg px-3 py-2.5 text-sm sm:text-base font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
                     >
                       <User className="h-4 w-4" />
                       Dashboard
@@ -240,7 +240,7 @@ export default function Navbar() {
 
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="text-red-600 cursor-pointer rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-red-50 transition-colors flex items-center gap-2"
+                    className="text-red-600 cursor-pointer rounded-lg px-3 py-2.5 text-sm sm:text-base font-medium hover:bg-red-50 transition-colors flex items-center gap-2"
                   >
                     <LogOut className="h-4 w-4" />
                     Logout
@@ -297,7 +297,7 @@ export default function Navbar() {
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 
                                focus:border-[#006D77] focus:outline-none focus:ring-2 
                                focus:ring-[#006D77]/20 transition-all bg-white 
-                               placeholder:text-gray-400 text-sm font-medium"
+                               placeholder:text-gray-400 text-sm sm:text-base font-medium"
                     />
                   </div>
                 </form>
@@ -368,7 +368,7 @@ export default function Navbar() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 text-sm truncate">
+                          <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                             {user.email?.split("@")[0]}
                           </p>
                           <p className="text-xs text-gray-500 truncate">{user.email}</p>
@@ -431,7 +431,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-xl mb-1">Authentication Required</h3>
-                      <p className="text-teal-100 text-sm">Please sign in to continue</p>
+                      <p className="text-teal-100 text-sm sm:text-base">Please sign in to continue</p>
                     </div>
                   </div>
                   <button
@@ -444,7 +444,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="p-6">
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                  <p className="text-gray-600 mb-6 text-sm sm:text-base leading-relaxed">
                     To post a property on TownWrent, you need to create an account or sign in. Join our community of landlords and tenants today!
                   </p>
 
@@ -477,7 +477,7 @@ export default function Navbar() {
 
                   <button
                     onClick={() => setShowAuthPrompt(false)}
-                    className="w-full text-gray-600 hover:text-gray-900 font-medium py-2.5 text-sm hover:bg-gray-50 rounded-lg transition-all"
+                    className="w-full text-gray-600 hover:text-gray-900 font-medium py-2.5 text-sm sm:text-base hover:bg-gray-50 rounded-lg transition-all"
                   >
                     Continue Browsing
                   </button>

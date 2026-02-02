@@ -97,7 +97,7 @@ export default function AuthModal({
 
                   <div className="flex-1 text-left">
                     <h3 className="font-bold text-lg">Authentication Required</h3>
-                    <p className="text-teal-100 text-sm">Please sign in to continue</p>
+                    <p className="text-teal-100 text-sm sm:text-base">Please sign in to continue</p>
                   </div>
                 </div>
 
@@ -112,7 +112,7 @@ export default function AuthModal({
 
               {/* Body */}
               <div className="p-6">
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                <p className="text-gray-600 mb-6 text-sm sm:text-base leading-relaxed">
                   To Post A Property on TownWrent, you need to create an account or sign in.
                 </p>
 
@@ -151,7 +151,7 @@ export default function AuthModal({
 
                 <button
                   onClick={onClose}
-                  className="w-full text-gray-600 hover:text-gray-800 font-medium text-sm py-2"
+                  className="w-full text-gray-600 hover:text-gray-800 font-medium text-sm sm:text-base py-2"
                 >
                   Continue Browsing
                 </button>

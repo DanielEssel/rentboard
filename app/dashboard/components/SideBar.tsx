@@ -66,7 +66,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
                 size={20}
                 className={`${active ? "scale-110" : "group-hover:scale-110"} transition-transform`}
               />
-              <span className="text-sm">{item.label}</span>
+              <span className="text-sm sm:text-base">{item.label}</span>
 
               {active && <div className="ml-auto w-2 h-2 bg-[#006D77] rounded-full animate-pulse"></div>}
             </Link>
@@ -77,12 +77,12 @@ export default function Sidebar({ onClose }: SidebarProps) {
       {/* Footer */}
       <div className="px-6 py-4 border-t border-white/10">
         <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-          <p className="text-sm font-semibold">Need Help?</p>
+          <p className="text-sm sm:text-base font-semibold">Need Help?</p>
           <p className="text-xs text-white/70 mb-3">
             Check our documentation or contact support
           </p>
 
-          <button className="w-full bg-[#FFD166] text-[#006D77] text-sm font-semibold py-2 rounded-lg hover:bg-[#FFC94D] transition">
+          <button className="w-full bg-[#FFD166] text-[#006D77] text-sm sm:text-base font-semibold py-2 rounded-lg hover:bg-[#FFC94D] transition">
             Get Support
           </button>
         </div>

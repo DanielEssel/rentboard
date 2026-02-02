@@ -87,7 +87,7 @@ export default function HeroSection() {
             <Link
               href="/explore"
               className="
-      px-3 py-2 text-sm
+      px-3 py-2 text-sm sm:text-base
       sm:px-6 sm:py-4 sm:text-base
       bg-[#FFD166] text-[#006D77]
       font-semibold
@@ -104,7 +104,7 @@ export default function HeroSection() {
             <Link
               href="/request"
               className="
-      px-3 py-2 text-sm
+      px-3 py-2 text-sm sm:text-base
       sm:px-6 sm:py-4 sm:text-base
       bg-white/10 backdrop-blur-md text-white
       font-semibold
@@ -122,7 +122,7 @@ export default function HeroSection() {
             <Link
               href="/list-property"
               className="
-      px-3 py-2 text-sm
+      px-3 py-2 text-sm sm:text-base
       sm:px-6 sm:py-4 sm:text-base
       bg-[#FFD166] text-[#006D77]
       font-semibold

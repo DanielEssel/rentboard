@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import PageHeaders from "@/components/PageHeaders";
-import { createProperty } from "@/lib/propertyApi";
+import { createProperty } from "@/lib/properties";
 import { supabase } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import AuthModal from "@/components/AuthModal";
@@ -240,7 +240,7 @@ export default function PostPropertyPage() {
             <h1 className="text-2xl font-bold text-[#006D77]">
               Post a Property
             </h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm sm:text-base text-gray-500 mt-1">
               Share your property details to reach verified tenants.
             </p>
           </div>
@@ -263,7 +263,7 @@ export default function PostPropertyPage() {
 
         {/* Error Banner */}
         {errors.submit && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm sm:text-base">
             {errors.submit}
           </div>
         )}
@@ -284,9 +284,9 @@ export default function PostPropertyPage() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <label>
-                    <span className="text-sm text-gray-700">Title</span>
+                    <span className="text-sm sm:text-base text-gray-700">Title</span>
                     <input
-                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                         errors.title ? "border-red-400" : "border-gray-200"
                       }`}
                       placeholder="e.g. 2-Bedroom Apartment near Market"
@@ -301,9 +301,9 @@ export default function PostPropertyPage() {
                   </label>
 
                   <label>
-                    <span className="text-sm text-gray-700">Property Type</span>
+                    <span className="text-sm sm:text-base text-gray-700">Property Type</span>
                     <select
-                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                         errors.propertyType
                           ? "border-red-400"
                           : "border-gray-200"
@@ -326,10 +326,10 @@ export default function PostPropertyPage() {
                   </label>
 
                   <label>
-                    <span className="text-sm text-gray-700">Price (GHS)</span>
+                    <span className="text-sm sm:text-base text-gray-700">Price (GHS)</span>
                     <input
                       type="number"
-                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                         errors.price ? "border-red-400" : "border-gray-200"
                       }`}
                       placeholder="e.g. 800"
@@ -344,11 +344,11 @@ export default function PostPropertyPage() {
                   </label>
 
                   <label>
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm sm:text-base text-gray-700">
                       Payment Frequency
                     </span>
                     <select
-                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
+                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
                       value={form.paymentFrequency}
                       onChange={(e) =>
                         update("paymentFrequency", e.target.value as any)
@@ -370,9 +370,9 @@ export default function PostPropertyPage() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <label>
-                    <span className="text-sm text-gray-700">Region</span>
+                    <span className="text-sm sm:text-base text-gray-700">Region</span>
                     <input
-                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                         errors.region ? "border-red-400" : "border-gray-200"
                       }`}
                       placeholder="e.g. Central Region"
@@ -387,9 +387,9 @@ export default function PostPropertyPage() {
                   </label>
 
                   <label>
-                    <span className="text-sm text-gray-700">Town</span>
+                    <span className="text-sm sm:text-base text-gray-700">Town</span>
                     <input
-                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                      className={`mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                         errors.town ? "border-red-400" : "border-gray-200"
                       }`}
                       placeholder="e.g. Awutu Bawjiase"
@@ -404,11 +404,11 @@ export default function PostPropertyPage() {
                   </label>
 
                   <label className="sm:col-span-2">
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm sm:text-base text-gray-700">
                       Landmark / Directions
                     </span>
                     <input
-                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
+                      className="mt-1 w-full rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] border-gray-200"
                       placeholder="e.g. Near Morning Star Temple"
                       value={form.landmark}
                       onChange={(e) => update("landmark", e.target.value)}
@@ -431,7 +431,7 @@ export default function PostPropertyPage() {
                         key={a}
                         onClick={() => toggleAmenity(a)}
                         type="button"
-                        className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                        className={`px-3 py-1.5 text-sm sm:text-base rounded-full border transition ${
                           active
                             ? "bg-[#83C5BE] text-white"
                             : "bg-white text-gray-700 border-gray-300"
@@ -444,9 +444,9 @@ export default function PostPropertyPage() {
                 </div>
 
                 <label className="block mb-4">
-                  <span className="text-sm text-gray-700">Description</span>
+                  <span className="text-sm sm:text-base text-gray-700">Description</span>
                   <textarea
-                    className={`mt-1 w-full h-28 rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-[#83C5BE] ${
+                    className={`mt-1 w-full h-28 rounded-md border px-3 py-2 text-sm sm:text-base focus:ring-2 focus:ring-[#83C5BE] ${
                       errors.description ? "border-red-400" : "border-gray-200"
                     }`}
                     placeholder="Include details like water, electricity, nearby landmarks, etc."

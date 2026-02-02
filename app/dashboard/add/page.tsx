@@ -208,7 +208,7 @@ export default function AddPropertyPage() {
       <Card className="border-0 shadow-lg">
         <CardContent className="p-6 md:p-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Property Images</h2>
-          <p className="text-sm text-gray-600 mb-4">Upload up to 10 images (max 5MB each)</p>
+          <p className="text-sm sm:text-base text-gray-600 mb-4">Upload up to 10 images (max 5MB each)</p>
 
           {imagePreviews.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
@@ -223,7 +223,7 @@ export default function AddPropertyPage() {
 
           <label className="block">
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#006D77] transition-colors cursor-pointer">
-              <p className="text-sm text-gray-600 mb-1">Click to upload or drag and drop</p>
+              <p className="text-sm sm:text-base text-gray-600 mb-1">Click to upload or drag and drop</p>
               <p className="text-xs text-gray-500">PNG, JPG, JPEG (max 5MB each)</p>
             </div>
             <input type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" disabled={loading} />
@@ -236,13 +236,13 @@ export default function AddPropertyPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Property Details</h2>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Property Title *</label>
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Property Title *</label>
             <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., Spacious 2 Bedroom Apartment in East Legon" disabled={loading} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Property Type *</label>
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Property Type *</label>
               <Select onValueChange={setPropertyType} value={propertyType} disabled={loading}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -254,7 +254,7 @@ export default function AddPropertyPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Payment Frequency *</label>
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Payment Frequency *</label>
               <Select onValueChange={(val) => setPaymentFrequency(val as "monthly" | "yearly" | "negotiable")} value={paymentFrequency} disabled={loading}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -267,7 +267,7 @@ export default function AddPropertyPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Price (GHS) *</label>
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Price (GHS) *</label>
             <Input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g., 1500" min="0" step="0.01" disabled={loading} />
           </div>
 
@@ -275,27 +275,27 @@ export default function AddPropertyPage() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Town *</label>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Town *</label>
                 <Input value={town} onChange={(e) => setTown(e.target.value)} placeholder="e.g., Accra" disabled={loading} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Region *</label>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Region *</label>
                 <Input value={region} onChange={(e) => setRegion(e.target.value)} placeholder="e.g., Greater Accra" disabled={loading} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Landmark (Optional)</label>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Landmark (Optional)</label>
                 <Input value={landmark} onChange={(e) => setLandmark(e.target.value)} placeholder="e.g., Near KNUST" disabled={loading} />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">Description *</label>
             <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe your property in detail..." className="h-32" disabled={loading} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Amenities</label>
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-3">Amenities</label>
             <div className="flex flex-wrap gap-2">
               {AMENITIES_OPTIONS.map((amenity) => (
                 <Button key={amenity} type="button" variant={amenities.includes(amenity) ? "default" : "outline"} onClick={() => toggleAmenity(amenity)} disabled={loading} className={amenities.includes(amenity) ? "bg-[#006D77] hover:bg-[#005560]" : ""}>
@@ -307,7 +307,7 @@ export default function AddPropertyPage() {
 
           <div className="flex items-center gap-3 pt-4 border-t">
             <input type="checkbox" id="available" checked={available} onChange={(e) => setAvailable(e.target.checked)} className="w-4 h-4 text-[#006D77] rounded" disabled={loading} />
-            <label htmlFor="available" className="text-sm font-medium">Property is available for rent</label>
+            <label htmlFor="available" className="text-sm sm:text-base font-medium">Property is available for rent</label>
           </div>
         </CardContent>
       </Card>

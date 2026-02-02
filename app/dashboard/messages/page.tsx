@@ -115,7 +115,7 @@ export default function MessagesPage() {
 
               <Link
                 href={`/dashboard/properties/${msg.property_id}`}
-                className="text-sm text-gray-500 hover:underline"
+                className="text-sm sm:text-base text-gray-500 hover:underline"
               >
                 View Property
               </Link>

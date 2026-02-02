@@ -227,7 +227,7 @@ export default function HowItWorksPage() {
                   <benefit.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-800 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 text-sm">{benefit.description}</p>
+                <p className="text-gray-600 text-sm sm:text-base">{benefit.description}</p>
               </div>
             ))}
           </div>

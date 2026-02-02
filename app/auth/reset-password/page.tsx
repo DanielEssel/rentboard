@@ -195,7 +195,7 @@ function ResetPasswordForm() {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 relative z-10 flex items-center gap-3">
             <Shield className="w-8 h-8 text-yellow-400" />
             <div>
-              <p className="text-sm text-teal-100">Secure & Safe</p>
+              <p className="text-sm sm:text-base text-teal-100">Secure & Safe</p>
               <p className="text-lg font-bold text-white">256-bit Encryption</p>
             </div>
           </div>
@@ -225,7 +225,7 @@ function ResetPasswordForm() {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-start gap-2">
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm sm:text-base flex items-start gap-2">
                     <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                     <div>
                       <p>{error}</p>
@@ -244,7 +244,7 @@ function ResetPasswordForm() {
                 <div className="space-y-5">
                   {/* New Password Input */}
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="password" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                       New Password
                     </label>
                     <div className="relative">
@@ -299,7 +299,7 @@ function ResetPasswordForm() {
 
                   {/* Confirm Password Input */}
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="confirmPassword" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                       Confirm Password
                     </label>
                     <div className="relative">
@@ -363,7 +363,7 @@ function ResetPasswordForm() {
                 {/* Info Box */}
                 {!tokenError && (
                   <div className="mt-6 p-4 bg-teal-50 rounded-xl border border-teal-100">
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm sm:text-base text-gray-700">
                       <span className="font-semibold text-teal-700">🔒 Secure:</span> Your password is encrypted and never stored in plain text.
                     </p>
                   </div>
@@ -382,7 +382,7 @@ function ResetPasswordForm() {
                 </p>
 
                 <div className="bg-teal-50 rounded-xl p-4 mb-6">
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     Redirecting you to your login...
                   </p>
                 </div>
@@ -398,7 +398,7 @@ function ResetPasswordForm() {
             {/* Back to Login */}
             {!success && (
               <div className="mt-8 text-center">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Remember your password?{" "}
                   <Link
                     href="/login"

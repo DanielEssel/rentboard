@@ -413,7 +413,7 @@ export default function EditPropertyPage() {
 
           {/* Upload New Images */}
           <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm sm:text-base font-medium mb-2">
               Add More Images
             </label>
             <Input
@@ -425,7 +425,7 @@ export default function EditPropertyPage() {
               }
             />
             {newImages.length > 0 && (
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 mt-2">
                 {newImages.length} new image(s) selected
               </p>
             )}
@@ -438,7 +438,7 @@ export default function EditPropertyPage() {
         <CardContent className="p-6 space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm sm:text-base font-medium mb-2">
               Property Title *
             </label>
             <Input
@@ -451,7 +451,7 @@ export default function EditPropertyPage() {
           {/* Location */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Town *</label>
+              <label className="block text-sm sm:text-base font-medium mb-2">Town *</label>
               <Input
                 value={town}
                 onChange={(e) => setTown(e.target.value)}
@@ -459,7 +459,7 @@ export default function EditPropertyPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Region *</label>
+              <label className="block text-sm sm:text-base font-medium mb-2">Region *</label>
               <Input
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
@@ -467,7 +467,7 @@ export default function EditPropertyPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm sm:text-base font-medium mb-2">
                 Landmark (Optional)
               </label>
               <Input
@@ -480,7 +480,7 @@ export default function EditPropertyPage() {
 
           {/* Property Type */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm sm:text-base font-medium mb-2">
               Property Type *
             </label>
             <Select onValueChange={setPropertyType} value={propertyType}>
@@ -500,7 +500,7 @@ export default function EditPropertyPage() {
           {/* Price & Payment Frequency */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm sm:text-base font-medium mb-2">
                 Price (₵) *
               </label>
               <Input
@@ -513,7 +513,7 @@ export default function EditPropertyPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm sm:text-base font-medium mb-2">
                 Payment Frequency *
               </label>
               <Select
@@ -540,7 +540,7 @@ export default function EditPropertyPage() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm sm:text-base font-medium mb-2">
               Description *
             </label>
             <Textarea
@@ -553,7 +553,7 @@ export default function EditPropertyPage() {
 
           {/* Amenities */}
           <div>
-            <label className="block text-sm font-medium mb-2">Amenities</label>
+            <label className="block text-sm sm:text-base font-medium mb-2">Amenities</label>
             <div className="flex flex-wrap gap-2">
               {AMENITIES_OPTIONS.map((amenity) => (
                 <Button
@@ -582,7 +582,7 @@ export default function EditPropertyPage() {
               onChange={(e) => setAvailable(e.target.checked)}
               className="w-4 h-4 text-[#006D77] rounded"
             />
-            <label htmlFor="available" className="text-sm font-medium">
+            <label htmlFor="available" className="text-sm sm:text-base font-medium">
               Property is available for rent
             </label>
           </div>

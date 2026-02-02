@@ -73,7 +73,7 @@ export default function BookSiteVisitModal({
           </button>
 
           <h2 className="text-xl font-bold text-center">Book a Visit</h2>
-          <p className="text-white/90 text-sm text-center mt-1">{propertyTitle}</p>
+          <p className="text-white/90 text-sm sm:text-base text-center mt-1">{propertyTitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-6">
@@ -94,7 +94,7 @@ export default function BookSiteVisitModal({
                   value={form.name}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm outline-none"
+                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm sm:text-base outline-none"
                 />
               </div>
 
@@ -107,7 +107,7 @@ export default function BookSiteVisitModal({
                   value={form.phone}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm outline-none"
+                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm sm:text-base outline-none"
                 />
               </div>
 
@@ -121,7 +121,7 @@ export default function BookSiteVisitModal({
                   value={form.date}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm outline-none"
+                  className="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-[#006D77] text-sm sm:text-base outline-none"
                 />
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function BookSiteVisitModal({
                 <div
                   key={pkg.name}
                   onClick={() => setSelectedPackage(pkg.name)}
-                  className={`relative p-4 rounded-xl border text-sm cursor-pointer transition-all
+                  className={`relative p-4 rounded-xl border text-sm sm:text-base cursor-pointer transition-all
                     ${selectedPackage === pkg.name
                       ? "border-[#006D77] bg-[#006D77]/10 shadow-md scale-[1.02]"
                       : "border-gray-300 hover:border-[#006D77]/40"}
@@ -206,7 +206,7 @@ export default function BookSiteVisitModal({
           <button
             type="submit"
             disabled={!selectedPackage}
-            className={`w-full py-3 rounded-xl font-semibold text-sm transition-all
+            className={`w-full py-3 rounded-xl font-semibold text-sm sm:text-base transition-all
               ${
                 selectedPackage
                   ? "bg-[#006D77] hover:bg-[#005662] text-white shadow-md"

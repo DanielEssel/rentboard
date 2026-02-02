@@ -38,7 +38,7 @@ export default function PropertyFilters({
               <h3 className="font-bold text-gray-900 text-lg">
                 Filters
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm sm:text-base text-gray-500">
                 Refine your search
               </p>
             </div>
@@ -64,7 +64,7 @@ export default function PropertyFilters({
 
           {/* LOCATION */}
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-semibold text-gray-700">Location</span>
+            <span className="text-sm sm:text-base font-semibold text-gray-700">Location</span>
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -77,7 +77,7 @@ export default function PropertyFilters({
 
           {/* PROPERTY TYPE */}
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-semibold text-gray-700">Property Type</span>
+            <span className="text-sm sm:text-base font-semibold text-gray-700">Property Type</span>
             <select
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
@@ -97,7 +97,7 @@ export default function PropertyFilters({
 
           {/* PRICE */}
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-semibold text-gray-700">Price Range</span>
+            <span className="text-sm sm:text-base font-semibold text-gray-700">Price Range</span>
             <select
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}

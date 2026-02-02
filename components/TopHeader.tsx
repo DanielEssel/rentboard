@@ -7,7 +7,7 @@ export default function TopHeader() {
   return (
     <div className="bg-gradient-to-r from-[#006D77] to-[#005662] text-white border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="h-10 flex items-center justify-between text-[11px] sm:text-sm whitespace-nowrap">
+        <div className="h-10 flex items-center justify-between text-[11px] sm:text-sm sm:text-base whitespace-nowrap">
 
           {/* Left: Contact */}
           <div className="flex items-center gap-3 sm:gap-5 min-w-0">

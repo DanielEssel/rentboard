@@ -139,7 +139,7 @@ export default function PropertiesPage() {
 
                 <div className="p-4">
                   <h3 className="font-semibold text-lg truncate">{p.title}</h3>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 text-sm sm:text-base">
                     {p.town}, {p.region}
                   </p>
 

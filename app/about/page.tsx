@@ -254,7 +254,7 @@ export default function AboutPage() {
               >
                 <div className="w-3 h-3 bg-[#FFD166] rounded-full mb-4"></div>
                 <h3 className="text-lg font-bold text-gray-800 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -315,7 +315,7 @@ export default function AboutPage() {
             >
               <Phone className="h-8 w-8 text-[#FFD166]" />
               <div>
-                <div className="text-sm text-gray-300 mb-1">Phone</div>
+                <div className="text-sm sm:text-base text-gray-300 mb-1">Phone</div>
                 <div className="font-semibold">+233 245 258 015</div>
               </div>
             </a>
@@ -326,7 +326,7 @@ export default function AboutPage() {
             >
               <Mail className="h-8 w-8 text-[#FFD166]" />
               <div>
-                <div className="text-sm text-gray-300 mb-1">Email</div>
+                <div className="text-sm sm:text-base text-gray-300 mb-1">Email</div>
                 <div className="font-semibold">info@townwrent.com</div>
               </div>
             </a>
@@ -334,7 +334,7 @@ export default function AboutPage() {
             <div className="flex flex-col items-center gap-3 p-6 bg-white/10 rounded-xl border border-white/20">
               <MapPin className="h-8 w-8 text-[#FFD166]" />
               <div>
-                <div className="text-sm text-gray-300 mb-1">Location</div>
+                <div className="text-sm sm:text-base text-gray-300 mb-1">Location</div>
                 <div className="font-semibold">Accra, Ghana</div>
               </div>
             </div>

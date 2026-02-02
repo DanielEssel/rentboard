@@ -141,11 +141,11 @@ export default function DashboardTopbar({
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-72 max-h-80 overflow-y-auto">
-              <p className="px-3 py-2 text-sm font-semibold">Notifications</p>
+              <p className="px-3 py-2 text-sm sm:text-base font-semibold">Notifications</p>
               <DropdownMenuSeparator />
 
               {messages.length === 0 ? (
-                <p className="text-center py-3 text-gray-500 text-sm">
+                <p className="text-center py-3 text-gray-500 text-sm sm:text-base">
                   No messages
                 </p>
               ) : (
@@ -161,7 +161,7 @@ export default function DashboardTopbar({
                       fetchMessages();
                       router.push(`/dashboard/messages/${msg.id}`);
                     }}
-                    className={`cursor-pointer px-3 py-2 text-sm ${
+                    className={`cursor-pointer px-3 py-2 text-sm sm:text-base ${
                       msg.is_read ? "bg-white" : "bg-gray-100"
                     }`}
                   >
@@ -190,7 +190,7 @@ export default function DashboardTopbar({
                 className="w-9 h-9 rounded-full border-2 border-[#006D77]/20"
               />
               <div className="hidden md:block">
-                <p className="text-sm font-medium">{displayName}</p>
+                <p className="text-sm sm:text-base font-medium">{displayName}</p>
                 <p className="text-xs text-gray-500 truncate">{email}</p>
               </div>
               <ChevronDown className="w-4 h-4 text-gray-500 hidden sm:block" />

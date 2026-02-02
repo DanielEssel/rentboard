@@ -19,7 +19,7 @@ function FooterSection({
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between text-[#FFD166] font-semibold text-sm sm:text-base lg:pointer-events-none"
+        className="flex w-full items-center justify-between text-[#FFD166] font-semibold text-sm sm:text-base sm:text-base lg:pointer-events-none"
       >
         {title}
         <ChevronDown
@@ -30,7 +30,7 @@ function FooterSection({
       </button>
 
       <ul
-        className={`mt-3 space-y-2 text-gray-200 text-sm ${
+        className={`mt-3 space-y-2 text-gray-200 text-sm sm:text-base ${
           open ? "block" : "hidden"
         } lg:block`}
       >
@@ -94,7 +94,7 @@ export default function Footer() {
               priority
               className="mx-auto lg:mx-0 mb-4"
             />
-            <p className="text-gray-200 text-sm max-w-xs mx-auto lg:mx-0">
+            <p className="text-gray-200 text-sm sm:text-base max-w-xs mx-auto lg:mx-0">
               Connecting tenants with verified properties across Ghana.
             </p>
 

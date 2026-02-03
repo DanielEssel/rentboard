@@ -1,7 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
 import PropertyCard from "@/components/PropertyCard"
-import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getProperties, type Property } from "@/lib/properties"
 import { supabase } from "@/lib/supabase/client"
@@ -28,6 +27,13 @@ const staggerContainer = {
     }
   }
 }
+
+// Simple loading spinner without lucide-react
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center min-h-[300px]">
+    <div className="h-10 w-10 border-4 border-[#006D77] border-t-transparent rounded-full animate-spin"></div>
+  </div>
+)
 
 export default function FeaturedProperties() {
   const [properties, setProperties] = useState<(Property & { image: string; location: string })[]>([])
@@ -56,9 +62,9 @@ export default function FeaturedProperties() {
         // Fetch all properties
         const data = await getProperties()
         
-        // Randomly select 3 properties to feature
+        // Randomly select 4 properties to feature
         const shuffled = [...data].sort(() => 0.5 - Math.random())
-        const featuredProperties = shuffled.slice(0, 3).map(prop => ({
+        const featuredProperties = shuffled.slice(0, 4).map(prop => ({
           ...prop,
           // Get the first image from property_images array
           image: prop.property_images?.[0]?.image_url 
@@ -83,45 +89,43 @@ export default function FeaturedProperties() {
 
   return (
     <motion.section 
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50 text-gray-800" 
+      className="py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 text-gray-800" 
       initial="hidden" 
       whileInView="visible" 
       viewport={{ once: true, margin: "-50px", amount: 0.2 }}
     >
-      <motion.div variants={fadeInUp} className="text-center mb-8 sm:mb-12 px-4">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Featured Properties</h2>
-        <p className="text-sm sm:text-base sm:text-base text-gray-600 max-w-2xl mx-auto">
-          Hand-picked premium properties with the best value and location
-        </p>
-      </motion.div>
-
-      {/* Loading State */}
-      {loading && (
-        <div className="flex justify-center items-center min-h-[300px]">
-          <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#006D77] animate-spin" />
-        </div>
-      )}
-
-      {/* Properties Grid */}
-      {!loading && properties.length > 0 && (
-        <motion.div 
-          variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto"
-        >
-          {properties.map((prop) => (
-            <motion.div key={prop.id} variants={fadeInUp}>
-              <PropertyCard property= {prop} />
-            </motion.div>   
-          ))}
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={fadeInUp} className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Featured Properties</h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Hand-picked premium properties with the best value and location
+          </p>
         </motion.div>
-      )}
 
-      {/* Empty State */}
-      {!loading && properties.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No featured properties available at the moment.</p>
-        </div>
-      )}
+        {/* Loading State */}
+        {loading && <LoadingSpinner />}
+
+        {/* Properties Grid - 2 columns on mobile, 3 on desktop */}
+        {!loading && properties.length > 0 && (
+          <motion.div 
+            variants={staggerContainer}
+            className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8"
+          >
+            {properties.map((prop) => (
+              <motion.div key={prop.id} variants={fadeInUp}>
+                <PropertyCard property={prop} />
+              </motion.div>   
+            ))}
+          </motion.div>
+        )}
+
+        {/* Empty State */}
+        {!loading && properties.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-sm sm:text-base">No featured properties available at the moment.</p>
+          </div>
+        )}
+      </div>
     </motion.section>
   )
 }

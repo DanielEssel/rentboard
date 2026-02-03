@@ -2,7 +2,6 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import PropertyCard from "@/components/PropertyCard"
-import { Search, Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getProperties, type Property } from "@/lib/properties"
 import { supabase } from "@/lib/supabase/client"
@@ -33,6 +32,31 @@ const staggerContainer = {
     }
   }
 }
+
+// Custom Loading Spinner (no lucide-react)
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center min-h-[300px]">
+    <div className="h-10 w-10 border-4 border-[#006D77] border-t-transparent rounded-full animate-spin"></div>
+  </div>
+)
+
+// Custom Search Icon (no lucide-react)
+const SearchIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.35-4.35" />
+  </svg>
+)
 
 export default function RecentProperties() {
   const [properties, setProperties] = useState<ExtendedProperty[]>([])
@@ -88,63 +112,61 @@ export default function RecentProperties() {
 
   return (
     <motion.section 
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white text-gray-800" 
+      className="py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-800" 
       initial="hidden" 
       whileInView="visible" 
       viewport={{ once: true, margin: "-50px", amount: 0.2 }}
     >
-      <motion.div variants={fadeInUp} className="text-center mb-8 sm:mb-12 px-4">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Recently Listed Properties</h2>
-        <p className="text-sm sm:text-base sm:text-base text-gray-600 max-w-2xl mx-auto">
-          Fresh listings added daily. Be the first to discover your next home
-        </p>
-      </motion.div>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={fadeInUp} className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Recently Listed Properties</h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Fresh listings added daily. Be the first to discover your next home
+          </p>
+        </motion.div>
 
-      {/* Loading State */}
-      {loading && (
-        <div className="flex justify-center items-center min-h-[300px]">
-          <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#006D77] animate-spin" />
-        </div>
-      )}
+        {/* Loading State */}
+        {loading && <LoadingSpinner />}
 
-      {/* Properties Grid */}
-      {!loading && properties.length > 0 && (
-        <>
-          <motion.div 
-            variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto"
-          >
-            {properties.map((prop) => (
-              <motion.div key={prop.id} variants={fadeInUp}>
-                <PropertyCard property={prop} />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="text-center mt-8 sm:mt-12 px-4">
-            <Link
-              href="/explore"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#006D77] text-white font-semibold rounded-lg sm:rounded-xl hover:bg-[#005662] active:bg-[#004a54] hover:shadow-lg active:shadow-md transition-all duration-300 text-sm sm:text-base sm:text-base w-full sm:w-auto max-w-xs"
+        {/* Properties Grid - 2 columns on mobile, 4 on desktop */}
+        {!loading && properties.length > 0 && (
+          <>
+            <motion.div 
+              variants={staggerContainer}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6"
             >
-              View All Properties
-              <Search className="h-4 w-4 sm:h-5 sm:w-5" />
+              {properties.map((prop) => (
+                <motion.div key={prop.id} variants={fadeInUp}>
+                  <PropertyCard property={prop} />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <div className="text-center mt-8 sm:mt-10 md:mt-12">
+              <Link
+                href="/explore"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#006D77] text-white font-semibold rounded-lg sm:rounded-xl hover:bg-[#005662] active:bg-[#004a54] hover:shadow-lg active:shadow-md transition-all duration-300 text-sm sm:text-base w-full sm:w-auto max-w-xs mx-auto"
+              >
+                View All Properties
+                <SearchIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+              </Link>
+            </div>
+          </>
+        )}
+
+        {/* Empty State */}
+        {!loading && properties.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4 text-sm sm:text-base">No recent properties available at the moment.</p>
+            <Link
+              href="/list-property"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#006D77] text-white font-semibold rounded-lg hover:bg-[#005662] transition-all duration-300 text-sm sm:text-base"
+            >
+              List Your Property
             </Link>
           </div>
-        </>
-      )}
-
-      {/* Empty State */}
-      {!loading && properties.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">No recent properties available at the moment.</p>
-          <Link
-            href="/list-property"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#006D77] text-white font-semibold rounded-lg hover:bg-[#005662] transition-all duration-300"
-          >
-            List Your Property
-          </Link>
-        </div>
-      )}
+        )}
+      </div>
     </motion.section>
   )
 }

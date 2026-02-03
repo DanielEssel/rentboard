@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const menuItems = [
     { label: "Browse Properties", href: "/explore" },
-    { label: "Request a Room", href: "/request-room" },
+    { label: "Request a Room", href: "/request" },
     { label: "Post a Property", href: "/list-property" },
   ];
 

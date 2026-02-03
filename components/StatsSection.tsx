@@ -61,7 +61,7 @@ export default function StatsSection() {
       whileInView="visible"
       viewport={{ once: true }}
     >
-      {/* Section Header */}
+      {/* Section Header*/}
       <motion.div
         className="max-w-3xl mx-auto text-center mb-8 sm:mb-12"
         variants={{

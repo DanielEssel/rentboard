@@ -4,6 +4,19 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Home, Users, MapPin, TrendingUp } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
+import { easeOut } from "framer-motion";
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10, scale: 0.95 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1, 
+    transition: { duration: 0.4, ease: easeOut } 
+  },
+};
+
+
 
 const stats = [
   { Icon: Home, value: 500, suffix: "+", label: "Properties Listed", description: "Verified rental homes" },
@@ -38,10 +51,7 @@ const containerVariants = {
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 10, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
-};
+
 
 export default function StatsSection() {
   return (
